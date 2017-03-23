@@ -4,7 +4,7 @@
 @JS()
 library highcharts.src.highcharts_js;
 
-import "dart:js" show JSFunction;
+import "dart:js" show JsFunction;
 import "package:js/js.dart";
 
 @JS('Highcharts.chart')
@@ -225,8 +225,8 @@ abstract class ChartTooltip {
   external bool get useHTML;
   external set useHTML(bool v);
 
-  external JSFunction get formatter;
-  external set formatter(JSFunction v);
+  external JsFunction get formatter;
+  external set formatter(JsFunction v);
 
   external factory ChartTooltip({
     String valueSuffix,
@@ -235,7 +235,7 @@ abstract class ChartTooltip {
     String footerFormat,
     bool shared,
     bool useHTML,
-    JSFunction formatter});
+    JsFunction formatter});
 }
 
 @anonymous
@@ -359,8 +359,8 @@ abstract class ChartHover {
 @anonymous
 @JS()
 abstract class ChartLabels {
-  external JSFunction get formatter;
-  external set formatter(JSFunction v);
+  external JsFunction get formatter;
+  external set formatter(JsFunction v);
 
   external Map<String, String> get style;
   external set style(Map<String, String> v);
@@ -368,7 +368,7 @@ abstract class ChartLabels {
   external num get step;
   external set step(num step);
 
-  external factory ChartLabels({JSFunction formatter, Map<String, String> style, num step});
+  external factory ChartLabels({JsFunction formatter, Map<String, String> style, num step});
 }
 
 @anonymous
@@ -383,14 +383,14 @@ abstract class ChartDataLabels {
   external bool get enabled;
   external set enabled(bool v);
 
-  external JSFunction get formatter;
-  external set formatter(JSFunction v);
+  external JsFunction get formatter;
+  external set formatter(JsFunction v);
 
   external factory ChartDataLabels({
     String color,
     bool enabled,
     num distance,
-    JSFunction formatter});
+    JsFunction formatter});
 
 }
 
