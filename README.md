@@ -3,7 +3,7 @@
 [highcharts](http://rikulo.org) is a porting of [Highcharts](https://www.highcharts.com) in Dart.
 
 * [Home](http://rikulo.org)
-* [API Reference](http://www.dartdocs.org/documentation/highcharts/0.1.0/index.html)
+* [API Reference](http://www.dartdocs.org/documentation/rikulo_highcharts/0.1.0/index.html)
 * [Git Repository](https://github.com/rikulo/highcharts)
 * [Issues](https://github.com/rikulo/highcharts/issues)
 
@@ -12,7 +12,7 @@
 Include the following in your `pubspec.yaml`:
 
     dependencies:
-      highcharts: any
+      rikulo_highcharts: any
 
 Then run the [Pub Package Manager](http://pub.dartlang.org/doc) in Dart Editor (Tool > Pub Install). If you are using a different editor, run the command
 (comes with the Dart SDK):
@@ -28,8 +28,8 @@ Add this lines to the main html of your application (index.html) in the head sec
 
 You can create a chart object and chart model.
 
-	import 'dart:html';
-    import 'package:highcharts/highcharts.dart';
+	  import 'dart:html';
+    import 'package:rikulo_highcharts/highcharts.dart';
 
     main() {
       ColumnChart chart = new ColumnChart();
@@ -54,3 +54,7 @@ You can create a chart object and chart model.
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/rikulo/highcharts/issues
+
+## Who Uses
+
+* [Quire](https://quire.io) - a simple, collaborative, multi-level task management tool.
