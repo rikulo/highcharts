@@ -212,7 +212,6 @@ abstract class _BaseChartImpl implements Chart {
   @override
   void set xAxis(ChartXAxis xAxis) {
     this._xAxis = xAxis;
-    print('set $xAxis');
   }
 
   @override
@@ -285,7 +284,6 @@ abstract class _BaseChartImpl implements Chart {
 
   void _initChart() {
     ChartConfiguration config = _chartConfig;
-    print(xAxis);
 
     if (tooltip != null)
       config.tooltip = tooltip;
