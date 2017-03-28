@@ -180,6 +180,9 @@ abstract class ChartLegend {
   external bool get shadow;
   external set shadow(bool v);
 
+  external bool get enabled;
+  external set enabled(bool v);
+
   external Map<String, String> get itemStyle;
   external set itemStyle(Map<String, String> v);
 
@@ -191,6 +194,7 @@ abstract class ChartLegend {
     num borderWidth,
     bool floating,
     bool shadow,
+    bool enabled,
     Map<String, String> itemStyle});
 }
 
