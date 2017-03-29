@@ -76,7 +76,7 @@ abstract class ChartOptions {
   external set height(dynamic v);
 
   external factory ChartOptions({String type,
-  dynamic width, dynamic height});
+    dynamic width, dynamic height});
 }
 
 @anonymous
@@ -180,6 +180,9 @@ abstract class ChartLegend {
   external bool get shadow;
   external set shadow(bool v);
 
+  external bool get enabled;
+  external set enabled(bool v);
+
   external Map<String, String> get itemStyle;
   external set itemStyle(Map<String, String> v);
 
@@ -191,6 +194,7 @@ abstract class ChartLegend {
     num borderWidth,
     bool floating,
     bool shadow,
+    bool enabled,
     Map<String, String> itemStyle});
 }
 
@@ -295,8 +299,8 @@ abstract class AreaPlotOptions {
   external set marker(ChartMarker v);
 
   external factory AreaPlotOptions({
-  num radius,
-  ChartMarker marker});
+    num radius,
+    ChartMarker marker});
 
 }
 
@@ -312,7 +316,10 @@ abstract class ChartColumn {
   external num get borderWidth;
   external set borderWidth(num v);
 
-  external factory ChartColumn({num pointPadding, groupPadding, num borderWidth});
+  external String get stacking;
+  external set stacking(String v);
+
+  external factory ChartColumn({num pointPadding, groupPadding, num borderWidth, String stacking});
 }
 
 @anonymous
@@ -403,6 +410,9 @@ abstract class ChartDataSets {
   external String get color;
   external set color(String v);
 
+  external String get stack;
+  external set stack(String v);
+
   external String get size;
   external set size(String v);
 
@@ -434,11 +444,12 @@ abstract class ChartDataSets {
   external set data(List<dynamic> v);
 
   external factory ChartDataSets({
-  String name, String color, num y,
-  String size, String innerSize,
-  bool visible,
-  num startAngle, num endAngle,
-  num borderRadius, num borderWidth,
-  ChartDataLabels dataLabels,
-  List<dynamic> data});
+    String name, String color, num y,
+    String size, String innerSize,
+    bool visible,
+    num startAngle, num endAngle,
+    num borderRadius, num borderWidth,
+    String stack,
+    ChartDataLabels dataLabels,
+    List<dynamic> data});
 }
