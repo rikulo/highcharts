@@ -11,6 +11,7 @@ import "package:js/js.dart";
 class HighChart {
 
   external void redraw();
+  external void update(ChartConfiguration options, bool redraw);
 
   external factory HighChart(dynamic container, ChartConfiguration options);
 }
@@ -75,8 +76,11 @@ abstract class ChartOptions {
   external dynamic get height;
   external set height(dynamic v);
 
+  external List<num> get margin;
+  external set margin(List<num> v);
+
   external factory ChartOptions({String type,
-    dynamic width, dynamic height});
+    dynamic width, dynamic height, List<num> margin});
 }
 
 @anonymous
@@ -280,12 +284,26 @@ abstract class PiePlotOptions {
   external ChartDataLabels get dataLabels;
   external set dataLabels(ChartDataLabels v);
 
+  external bool get ignoreHiddenPoint;
+  external set ignoreHiddenPoint(bool v);
+
+  external bool get allowPointSelect;
+  external set allowPointSelect(bool v);
+
+  external String get size;
+  external set size(String v);
+
+  external ChartStates get states;
+  external set states(ChartStates v);
+
   external factory PiePlotOptions({
     String cursor,
     bool shadow,
     bool showInLegend,
     List<dynamic> center,
-    ChartDataLabels dataLabels});
+    ChartDataLabels dataLabels,
+    bool ignoreHiddenPoint,
+    String size, ChartStates states});
 }
 
 @anonymous
@@ -298,10 +316,12 @@ abstract class AreaPlotOptions {
   external ChartMarker get marker;
   external set marker(ChartMarker v);
 
-  external factory AreaPlotOptions({
-    num radius,
-    ChartMarker marker});
+  external String get stacking;
+  external set stacking(String v);
 
+  external factory AreaPlotOptions({
+    num radius, ChartMarker marker,
+    String stacking});
 }
 
 @anonymous
@@ -338,9 +358,19 @@ abstract class ChartMarker {
   external ChartStates get states;
   external set states(ChartStates v);
 
+  external String get fillColor;
+  external set fillColor(String v);
+
+  external String get lineColor;
+  external set lineColor(String v);
+
+  external num get lineWidth;
+  external set lineWidth(num v);
+
   external factory ChartMarker({
     bool enabled, String symbol, num radius,
-    ChartStates states});
+    ChartStates states,
+    String fillColor, String lineColor, num lineWidth});
 }
 
 @anonymous
@@ -350,7 +380,11 @@ abstract class ChartStates {
   external ChartHover get hover;
   external set hover(ChartHover v);
 
-  external factory ChartStates({ChartHover hover});
+  external String get symbol;
+  external set symbol(String v);
+
+  external factory ChartStates({
+    ChartHover hover, String symbol});
 }
 
 @anonymous
@@ -360,7 +394,19 @@ abstract class ChartHover {
   external bool get enabled;
   external set enabled(bool v);
 
-  external factory ChartHover({bool enabled});
+  external num get brightness;
+  external set brightness(num v);
+
+  external ChartHalo get halo;
+  external set halo(ChartHalo v);  
+
+  external factory ChartHover({bool enabled, num brightness, ChartHalo halo});
+}
+
+@anonymous
+@JS()
+abstract class ChartHalo {
+  external factory ChartHalo();
 }
 
 @anonymous
@@ -375,7 +421,10 @@ abstract class ChartLabels {
   external num get step;
   external set step(num step);
 
-  external factory ChartLabels({JsFunction formatter, Map<String, String> style, num step});
+  external bool get enabled;
+  external set enabled(bool v);
+
+  external factory ChartLabels({JsFunction formatter, Map<String, String> style, num step, bool enabled});
 }
 
 @anonymous
@@ -443,6 +492,12 @@ abstract class ChartDataSets {
   external List<dynamic> get data;
   external set data(List<dynamic> v);
 
+  external ChartMarker get marker;
+  external set marker(ChartMarker v);
+
+  external num get fillOpacity;
+  external set fillOpacity(num v);
+
   external factory ChartDataSets({
     String name, String color, num y,
     String size, String innerSize,
@@ -451,5 +506,25 @@ abstract class ChartDataSets {
     num borderRadius, num borderWidth,
     String stack,
     ChartDataLabels dataLabels,
-    List<dynamic> data});
+    List<dynamic> data, ChartMarker marker,
+    num fillOpacity});
+}
+
+@anonymous
+@JS()
+abstract class ChartInnerDataSets {
+  external String get name;
+  external set name(String v);
+
+  external num get y;
+  external set y(num v);
+
+  external num get color;
+  external set color(num v);
+
+  external bool get visible;
+  external set visible(bool v);
+
+  external factory ChartInnerDataSets({
+  String name, num y, String color, bool visible});
 }

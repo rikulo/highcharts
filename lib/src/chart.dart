@@ -16,19 +16,19 @@ abstract class ChartType {
   static final String line = 'line';
 }
 
-abstract class Chart {
+abstract class Chart<T extends ChartModel> {
 
   Element get element;
 
   /**
    * Returns model
    */
-  ChartModel get model;
+  T get model;
 
   /**
    * Sets model
    */
-  void set model(ChartModel model);
+  void set model(T model);
 
   /**
    * Returns title of chart
@@ -126,30 +126,35 @@ abstract class Chart {
    */
   void render();
 
+  /**
+   * update chart's data and redraw
+   */
+  void update();
+
 }
 
-abstract class ColumnChart extends Chart {
+abstract class ColumnChart extends Chart<CategoryModel> {
   factory ColumnChart({String titleText: '', String subtitleText: '',
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
     => new _ColumnChartImpl(titleText: titleText, subtitleText: subtitleText,
         width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class DonutChart extends Chart {
+abstract class DonutChart extends Chart<DonutModel> {
   factory DonutChart({String titleText: '', String subtitleText: '',
   dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
   => new _DonutChartImpl(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class AreaChart extends Chart {
+abstract class AreaChart extends Chart<CategoryModel> {
   factory AreaChart({String titleText: '', String subtitleText: '',
   dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
   => new _AreaChartImpl(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class _BaseChartImpl implements Chart {
+abstract class _BaseChartImpl<T extends ChartModel> implements Chart<T> {
 
   final String type;
   final Element element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
@@ -177,7 +182,7 @@ abstract class _BaseChartImpl implements Chart {
   ChartTooltip _tooltip;
 
   HighChart _chart;
-  ChartModel _model;
+  T _model;
 
   @override
   dynamic get width => _width;
@@ -265,9 +270,9 @@ abstract class _BaseChartImpl implements Chart {
   List<ChartDataSets> get series;
 
   @override
-  ChartModel get model => _model;
+  T get model => _model;
   @override
-  void set model(ChartModel model) {
+  void set model(T model) {
     _model = model;
     render();
   }
@@ -296,9 +301,17 @@ abstract class _BaseChartImpl implements Chart {
 
     _chart = new HighChart(element, config);
   }
+
+  @override
+  void update() {
+    if (_chart == null)
+      return;
+
+    _chart.update(_chartConfig, true);
+  }
 }
 
-class _ColumnChartImpl extends _BaseChartImpl implements ColumnChart {
+class _ColumnChartImpl extends _BaseChartImpl<CategoryModel> implements ColumnChart {
 
   _ColumnChartImpl({String titleText, String subtitleText,
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
@@ -306,12 +319,12 @@ class _ColumnChartImpl extends _BaseChartImpl implements ColumnChart {
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
   List<ChartDataSets> get series {
-    List<ChartDataSets> list = [];
-    Map<String, List<int>> data = {};
+    final list = <ChartDataSets>[];
+    final data = <String, List<int>>{};
 
     for (List entry in model.keys) {
-      var series = entry[0], category = entry[1];
-      List<int> values = data[series] ?? [];
+      final series = entry[0], category = entry[1];
+      final values = data[series] ?? <int>[];
       values.add(model.getValue(series, category));
       data[series] = values;
     }
@@ -319,8 +332,9 @@ class _ColumnChartImpl extends _BaseChartImpl implements ColumnChart {
     for (String series in data.keys)
       list.add(new ChartDataSets(
         name: series,
-        color: model.getSeriesColor(series),
-        borderRadius: 4,
+        color: model.getSeriesStyle(series, SeriesStyle.color),
+        borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
+        fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
         data: data[series]));
 
     return list;
@@ -336,24 +350,82 @@ class _ColumnChartImpl extends _BaseChartImpl implements ColumnChart {
   }
 }
 
-class _DonutChartImpl extends _BaseChartImpl implements DonutChart {
+class _DonutChartImpl extends _BaseChartImpl<DonutModel> implements DonutChart {
 
   _DonutChartImpl({String titleText, String subtitleText,
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
-  super(ChartType.column, titleText: titleText, subtitleText: subtitleText,
+  super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
-  List<ChartDataSets> get series => const <ChartDataSets>[];
+  List<ChartDataSets> get series {
+    final seriesDatas = <ChartDataSets>[];
+
+    for (final key in model.keys) {
+      final singleCategoryModel = model.getValue(key);
+      final seriesData = <ChartInnerDataSets>[];
+
+      for (final category in singleCategoryModel.categories) {
+        seriesData.add(new ChartInnerDataSets(
+          name: category,
+          y: singleCategoryModel.getValue(category),
+          color: singleCategoryModel.getValueColor(category),
+          visible: singleCategoryModel.getValueColor(category) != null));
+      }
+
+      seriesDatas.add(new ChartDataSets(
+        size: model.getSeriesStyle(key, SeriesStyle.size),
+        innerSize: model.getSeriesStyle(key, SeriesStyle.innerSize),
+        data: seriesData
+      ));
+    }
+
+    return seriesDatas;
+  }
 }
 
-class _AreaChartImpl extends _BaseChartImpl implements AreaChart {
+class _AreaChartImpl extends _BaseChartImpl<CategoryModel> implements AreaChart {
 
   _AreaChartImpl({String titleText, String subtitleText,
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
-  super(ChartType.column, titleText: titleText, subtitleText: subtitleText,
+  super(ChartType.area, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
-  List<ChartDataSets> get series => const <ChartDataSets>[];
+  List<ChartDataSets> get series {
+    final list = <ChartDataSets>[];
+    final data = <String, List<int>>{};
+
+    for (List entry in model.keys) {
+      final series = entry[0], category = entry[1];
+      final values = data[series] ?? <int>[];
+      values.add(model.getValue(series, category));
+      data[series] = values;
+    }
+
+    for (String series in data.keys)
+      list.add(new ChartDataSets(
+        name: series,
+        color: model.getSeriesStyle(series, SeriesStyle.color),
+        fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
+        marker: new ChartMarker(
+          symbol: model.getSeriesStyle(series, SeriesStyle.markerSymbol),
+          fillColor: model.getSeriesStyle(series, SeriesStyle.markerFillColor),
+          lineColor: model.getSeriesStyle(series, SeriesStyle.markerLineColor) ?? '#ffffff', // charts default value
+          lineWidth: model.getSeriesStyle(series, SeriesStyle.markerLineWidth) ?? 0 // charts default value
+        ),
+        borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
+        data: data[series]));
+
+    return list;
+  }
+
+  CategoryModel get model => super.model;
+
+  void set model(ChartModel model) {
+    if (model is! CategoryModel)
+      return;
+
+    super.model = model;
+  }
 }
 
 /// allowInteropCaptureThis will return JSObject, so we must use deprecated class before we find better solution
