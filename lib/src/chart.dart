@@ -4,7 +4,8 @@
 library highcharts.src.chart;
 
 import 'dart:html';
-import 'dart:js' show JsNative;
+import 'dart:js' show JsObject;
+import "package:js/js.dart" show allowInteropCaptureThis;
 
 import 'chart_model.dart';
 import 'highcharts_js.dart';
@@ -399,9 +400,9 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable> extends _BaseCh
       data[series] = values;
     }
 
-    for (String series in data.keys)
+    for (S series in data.keys)
       list.add(new ChartDataSets(
-        name: series,
+        name: series.toString(),
         color: model.getSeriesStyle(series, SeriesStyle.color),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
         marker: new ChartMarker(
@@ -416,9 +417,21 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable> extends _BaseCh
     return list;
   }
 }
+///in dart2js: native js object place in 'o' property
+jsProperty(o, String key) => (_toJsObject(o)['o'] ?? _toJsObject(o))[key];
+JsObject _toJsObject(o) => new JsObject.fromBrowserObject(o);
+//in dart2js: js Date object will be JsObject not DateTime object
+DateTime jsDate(o, String key) {
+  var val = jsProperty(o, key);
 
-/// allowInteropCaptureThis will return JSObject, so we must use deprecated class before we find better solution
-jsProperty(o, String key) => JsNative.getProperty(o, key);
+  //dart2js only: do val.toString() for make val['date'] accessable
+  if (val is JsObject && val.toString().isNotEmpty)
+    val = val['date'];
+
+  return val is DateTime ? val: null;
+}
+
+Function jsFunction(Function f) => allowInteropCaptureThis(f);
 
 Element _createUncheckedHtml(String html)
 => new Element.html(html, treeSanitizer: NodeTreeSanitizer.trusted);

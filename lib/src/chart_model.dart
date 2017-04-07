@@ -3,8 +3,6 @@
 // Author: jimmy
 library highcharts.src.chart_model;
 
-import 'dart:collection' show LinkedHashMap;
-
 enum SeriesStyle { 
   color, borderRadius, fillOpacity, size, innerSize, 
   markerLineColor, markerSymbol, markerFillColor, markerLineWidth // marker

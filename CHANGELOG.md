@@ -4,6 +4,7 @@
 
 * Add implementation of DonutChart, AreaChart
 * Add DefaultSingleValueCategoryModel, DonutModel
+* Fixed dart2js error when using formatter
 
 **0.1.0**
 
