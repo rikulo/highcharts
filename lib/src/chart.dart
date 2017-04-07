@@ -16,7 +16,7 @@ abstract class ChartType {
   static final String line = 'line';
 }
 
-abstract class Chart<T extends ChartModel> {
+abstract class Chart<S extends Comparable, C extends Comparable, T extends ChartModel<S, C>> {
 
   Element get element;
 
@@ -133,28 +133,28 @@ abstract class Chart<T extends ChartModel> {
 
 }
 
-abstract class ColumnChart extends Chart<CategoryModel> {
+abstract class ColumnChart<S extends Comparable, C extends Comparable> implements Chart<S, C, CategoryModel<S, C>> {
   factory ColumnChart({String titleText: '', String subtitleText: '',
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-    => new _ColumnChartImpl(titleText: titleText, subtitleText: subtitleText,
+    => new _ColumnChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
         width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class DonutChart extends Chart<DonutModel> {
+abstract class DonutChart<S extends Comparable, C extends Comparable> extends Chart<S, C, DonutModel<S, C>> {
   factory DonutChart({String titleText: '', String subtitleText: '',
   dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-  => new _DonutChartImpl(titleText: titleText, subtitleText: subtitleText,
+  => new _DonutChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class AreaChart extends Chart<CategoryModel> {
+abstract class AreaChart<S extends Comparable, C extends Comparable> extends Chart<S, C, CategoryModel<S, C>> {
   factory AreaChart({String titleText: '', String subtitleText: '',
   dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-  => new _AreaChartImpl(titleText: titleText, subtitleText: subtitleText,
+  => new _AreaChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class _BaseChartImpl<T extends ChartModel> implements Chart<T> {
+abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   final String type;
   final Element element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
@@ -273,6 +273,9 @@ abstract class _BaseChartImpl<T extends ChartModel> implements Chart<T> {
   T get model => _model;
   @override
   void set model(T model) {
+    if (model is! T)
+      return;
+
     _model = model;
     render();
   }
@@ -311,16 +314,17 @@ abstract class _BaseChartImpl<T extends ChartModel> implements Chart<T> {
   }
 }
 
-class _ColumnChartImpl extends _BaseChartImpl<CategoryModel> implements ColumnChart {
+class _ColumnChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements ColumnChart<S, C> {
 
   _ColumnChartImpl({String titleText, String subtitleText,
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
   super(ChartType.column, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
+  @override
   List<ChartDataSets> get series {
     final list = <ChartDataSets>[];
-    final data = <String, List<int>>{};
+    final data = <S, List<int>>{};
 
     for (List entry in model.keys) {
       final series = entry[0], category = entry[1];
@@ -329,9 +333,9 @@ class _ColumnChartImpl extends _BaseChartImpl<CategoryModel> implements ColumnCh
       data[series] = values;
     }
 
-    for (String series in data.keys)
+    for (S series in data.keys)
       list.add(new ChartDataSets(
-        name: series,
+        name: series.toString(),
         color: model.getSeriesStyle(series, SeriesStyle.color),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
@@ -340,23 +344,16 @@ class _ColumnChartImpl extends _BaseChartImpl<CategoryModel> implements ColumnCh
     return list;
   }
 
-  CategoryModel get model => super.model;
-
-  void set model(ChartModel model) {
-    if (model is! CategoryModel)
-      return;
-
-    super.model = model;
-  }
 }
 
-class _DonutChartImpl extends _BaseChartImpl<DonutModel> implements DonutChart {
+class _DonutChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, DonutModel<S, C>> implements DonutChart<S, C> {
 
   _DonutChartImpl({String titleText, String subtitleText,
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
   super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
+  @override
   List<ChartDataSets> get series {
     final seriesDatas = <ChartDataSets>[];
 
@@ -366,7 +363,7 @@ class _DonutChartImpl extends _BaseChartImpl<DonutModel> implements DonutChart {
 
       for (final category in singleCategoryModel.categories) {
         seriesData.add(new ChartInnerDataSets(
-          name: category,
+          name: category.toString(),
           y: singleCategoryModel.getValue(category),
           color: singleCategoryModel.getValueColor(category),
           visible: singleCategoryModel.getValueColor(category) != null));
@@ -383,16 +380,17 @@ class _DonutChartImpl extends _BaseChartImpl<DonutModel> implements DonutChart {
   }
 }
 
-class _AreaChartImpl extends _BaseChartImpl<CategoryModel> implements AreaChart {
+class _AreaChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements AreaChart<S, C> {
 
   _AreaChartImpl({String titleText, String subtitleText,
     dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
   super(ChartType.area, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
+  @override
   List<ChartDataSets> get series {
     final list = <ChartDataSets>[];
-    final data = <String, List<int>>{};
+    final data = <S, List<int>>{};
 
     for (List entry in model.keys) {
       final series = entry[0], category = entry[1];
@@ -416,15 +414,6 @@ class _AreaChartImpl extends _BaseChartImpl<CategoryModel> implements AreaChart 
         data: data[series]));
 
     return list;
-  }
-
-  CategoryModel get model => super.model;
-
-  void set model(ChartModel model) {
-    if (model is! CategoryModel)
-      return;
-
-    super.model = model;
   }
 }
 
