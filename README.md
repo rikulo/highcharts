@@ -1,6 +1,6 @@
 # highcharts
 
-[highcharts](http://rikulo.org) is a porting of [Highcharts](https://www.highcharts.com) in Dart.
+[highcharts](http://rikulo.org) is a wrapper of [Highcharts](https://www.highcharts.com) in Dart.
 
 * [Home](http://rikulo.org)
 * [API Reference](http://www.dartdocs.org/documentation/rikulo_highcharts/0.1.0/index.html)
