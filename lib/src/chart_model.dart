@@ -57,7 +57,8 @@ abstract class AbstractChartModel<S extends Comparable, C extends Comparable> ex
   }
 }
 
-abstract class SingleValueCategoryModel<C extends Comparable> extends AbstractChartModel<String, C> {
+abstract class SingleValueCategoryModel<S extends Comparable, C extends Comparable> extends ChartModel<S, C> {
+  static String DEFAULT_SERIES = 'ds';
 
   /**
    * Get categories as a collection.
@@ -83,9 +84,14 @@ abstract class SingleValueCategoryModel<C extends Comparable> extends AbstractCh
   // Sets color
   void setValueColor(C category, String color);
 
+  // Returns value of [series] style
+  dynamic getSingleSeriesStyle(SeriesStyle name);
+
+  // Sets value of [series] style
+  void setSingleSeriesStyle(SeriesStyle name, dynamic value);
 }
 
-class DefaultSingleValueCategoryModel<C extends Comparable> extends SingleValueCategoryModel<C> {
+class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChartModel<String, C> implements SingleValueCategoryModel<String, C> {
   final _data = <C, num>{};
   final _color = <C, String>{};
 
@@ -140,10 +146,28 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends SingleValueC
     _data.clear();
     _color.clear();
   }
-}
 
-abstract class PieModel extends SingleValueCategoryModel {
+  @override
+  dynamic getSingleSeriesStyle(SeriesStyle name) {
+    return super.getSeriesStyle(SingleValueCategoryModel.DEFAULT_SERIES, name);
+  }
 
+  @override
+  void setSingleSeriesStyle(SeriesStyle name, dynamic value) {
+    return super.setSeriesStyle(SingleValueCategoryModel.DEFAULT_SERIES, name, value);
+  }
+
+  // Returns vlaue of marker of provided [series]
+  @override
+  dynamic getSeriesStyle(String series, SeriesStyle name) {
+    assert(false, "shouldn't call this methid, use [getSingleSeriesStyle] instead.");
+    return null;
+  }
+  // Sets value of marker of provided [series]
+  @override
+  void setSeriesStyle(String series, SeriesStyle name, dynamic value) {
+    assert(false, "shouldn't call this methid, use [getSingleSeriesStyle] instead.");
+  }
 }
 
 abstract class DonutModel<S extends Comparable, C extends Comparable> extends AbstractChartModel<S, C> {
@@ -157,14 +181,14 @@ abstract class DonutModel<S extends Comparable, C extends Comparable> extends Ab
   /**
    * Get value of the specified categoryModel
    */
-  SingleValueCategoryModel<C> getValue(S series);
+  SingleValueCategoryModel<S, C> getValue(S series);
 
-  void addSeries(S series, SingleValueCategoryModel<C> model, {
+  void addSeries(S series, SingleValueCategoryModel<S, C> model, {
     String size, String innerSize});
 }
 
 class DefaultDonutModel<S extends Comparable, C extends Comparable> extends DonutModel<S, C> {
-  final _data = <S, SingleValueCategoryModel<C>>{};
+  final _data = <S, SingleValueCategoryModel<S, C>>{};
 
   /**
    * Get (series) pairs of this chart data model. The returned
@@ -174,10 +198,10 @@ class DefaultDonutModel<S extends Comparable, C extends Comparable> extends Donu
   /**
    * Get value of the specified categoryModel
    */
-  SingleValueCategoryModel<C> getValue(S series) => _data[series];
+  SingleValueCategoryModel<S, C> getValue(S series) => _data[series];
 
   @override
-  void addSeries(S series, SingleValueCategoryModel<C> model, {
+  void addSeries(S series, SingleValueCategoryModel<S, C> model, {
     String size, String innerSize}) {
     _data[series] = model;
 

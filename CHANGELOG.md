@@ -2,7 +2,7 @@
 
 **0.1.1**
 
-* Add implementation of DonutChart, AreaChart
+* Add implementation of DonutChart, AreaChart, PieChart
 * Add DefaultSingleValueCategoryModel, DonutModel
 * Fixed dart2js error when using formatter
 

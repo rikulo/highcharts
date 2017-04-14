@@ -295,6 +295,12 @@ abstract class PiePlotOptions {
   external ChartStates get states;
   external set states(ChartStates v);
 
+  external num get startAngle;
+  external set startAngle(num v);
+
+  external num get endAngle;
+  external set endAngle(num v);
+
   external factory PiePlotOptions({
     String cursor,
     bool shadow,
@@ -302,7 +308,8 @@ abstract class PiePlotOptions {
     List<dynamic> center,
     ChartDataLabels dataLabels,
     bool ignoreHiddenPoint,
-    String size, ChartStates states});
+    String size, ChartStates states,
+    num startAngle, num endAngle});
 }
 
 @anonymous
