@@ -445,6 +445,7 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable> extends _BaseCh
           lineColor: model.getSeriesStyle(series, SeriesStyle.markerLineColor) ?? '#ffffff', // charts default value
           lineWidth: model.getSeriesStyle(series, SeriesStyle.markerLineWidth) ?? 0 // charts default value
         ),
+        lineColor: model.getSeriesStyle(series, SeriesStyle.lineColor),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         data: data[series]));
 
