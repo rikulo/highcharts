@@ -141,6 +141,13 @@ abstract class ColumnChart<S extends Comparable, C extends Comparable> implement
         width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
+abstract class PieChart<S extends Comparable, C extends Comparable> extends Chart<S, C, SingleValueCategoryModel<S, C>> {
+  factory PieChart({String titleText: '', String subtitleText: '',
+  dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
+  => new _PieChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
+      width: width, height: height, xAxis: xAxis, yAxis: yAxis);
+}
+
 abstract class DonutChart<S extends Comparable, C extends Comparable> extends Chart<S, C, DonutModel<S, C>> {
   factory DonutChart({String titleText: '', String subtitleText: '',
   dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
@@ -345,6 +352,33 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable> extends _Base
     return list;
   }
 
+}
+
+class _PieChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, SingleValueCategoryModel<S, C>> implements PieChart<S, C> {
+
+  _PieChartImpl({String titleText, String subtitleText,
+    dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
+  super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
+    width: width, height: height, xAxis: xAxis, yAxis: yAxis) {
+  }
+
+  @override
+  List<ChartDataSets> get series {
+    final singleCategoryModel = model;
+    final seriesData = <ChartInnerDataSets>[];
+
+    for (final category in singleCategoryModel.categories) {
+      seriesData.add(new ChartInnerDataSets(
+        name: category.toString(),
+        y: singleCategoryModel.getValue(category),
+        color: singleCategoryModel.getValueColor(category)));
+    }
+
+    return [new ChartDataSets(
+      innerSize: model.getSingleSeriesStyle(SeriesStyle.innerSize),
+      data: seriesData
+    )];
+  }
 }
 
 class _DonutChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, DonutModel<S, C>> implements DonutChart<S, C> {
