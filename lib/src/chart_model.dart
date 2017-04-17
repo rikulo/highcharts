@@ -4,7 +4,7 @@
 library highcharts.src.chart_model;
 
 enum SeriesStyle { 
-  color, borderRadius, fillOpacity, size, innerSize, 
+  color, borderRadius, fillOpacity, size, innerSize, lineColor,
   markerLineColor, markerSymbol, markerFillColor, markerLineWidth // marker
 }
 

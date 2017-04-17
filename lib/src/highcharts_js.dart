@@ -78,8 +78,11 @@ abstract class ChartOptions {
   external List<num> get margin;
   external set margin(List<num> v);
 
+  external num get marginTop;
+  external set marginTop(num v);
+
   external factory ChartOptions({String type,
-    dynamic width, dynamic height, List<num> margin});
+    dynamic width, dynamic height, List<num> margin, num marginTop});
 }
 
 @anonymous
@@ -97,8 +100,8 @@ abstract class ChartXAxis {
   external List<dynamic> get categories;
   external set categories(List<dynamic> v);
 
-  external bool get crosshair;
-  external set crosshair(bool v);
+  external ChartCrosshair get crosshair;
+  external set crosshair(ChartCrosshair v);
 
   external bool get allowDecimals;
   external set allowDecimals(bool v);
@@ -118,11 +121,37 @@ abstract class ChartXAxis {
   external num get lineWidth;
   external set lineWidth(num v);
 
+  external num get tickWidth;
+  external set tickWidth(num v);
+
+  external String get tickColor;
+  external set tickColor(String v);
+
+  external String get tickmarkPlacement;
+  external set tickmarkPlacement(String v);
+
   external factory ChartXAxis({
     List<dynamic> categories,
     ChartLabels labels,
-    bool allowDecimals, bool crosshair, num tickLength,
-    String lineColor, num lineWidth});
+    bool allowDecimals, ChartCrosshair crosshair, num tickLength,
+    String lineColor, num lineWidth, num tickWidth,
+    String tickColor, String tickmarkPlacement});
+}
+
+@anonymous
+@JS()
+abstract class ChartCrosshair {
+  external num get width;
+  external set width(num v);
+
+  external String get color;
+  external set color(String v);
+
+  external String get dashStyle;
+  external set dashStyle(String v);
+
+  external factory ChartCrosshair({
+    num width, String color, String dashStyle});
 }
 
 @anonymous
@@ -325,9 +354,15 @@ abstract class AreaPlotOptions {
   external String get stacking;
   external set stacking(String v);
 
+  external num get lineWidth;
+  external set lineWidth(num v);
+
+  external String get lineColor;
+  external set lineColor(String v);
+
   external factory AreaPlotOptions({
     num radius, ChartMarker marker,
-    String stacking});
+    String stacking, num lineWidth, String lineColor});
 }
 
 @anonymous
@@ -504,6 +539,12 @@ abstract class ChartDataSets {
   external num get fillOpacity;
   external set fillOpacity(num v);
 
+  external num get lineWidth;
+  external set lineWidth(num v);
+
+  external String get lineColor;
+  external set lineColor(String v);
+
   external factory ChartDataSets({
     String name, String color, num y,
     String size, String innerSize,
@@ -513,7 +554,7 @@ abstract class ChartDataSets {
     String stack,
     ChartDataLabels dataLabels,
     List<dynamic> data, ChartMarker marker,
-    num fillOpacity});
+    num fillOpacity, num lineWidth, String lineColor});
 }
 
 @anonymous
