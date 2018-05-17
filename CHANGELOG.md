@@ -5,6 +5,7 @@
 * Add implementation of DonutChart, AreaChart, PieChart
 * Add DefaultSingleValueCategoryModel, DonutModel
 * Fixed dart2js error when using formatter
+* Added setSize reflow APIs
 
 **0.1.0**
 

@@ -11,6 +11,8 @@ class HighChart {
 
   external void redraw();
   external void update(ChartConfiguration options, bool redraw);
+  external void reflow();
+  external void setSize(num width, num height, AnimationOptions animation);
 
   external factory HighChart(dynamic container, ChartConfiguration options);
 }
@@ -83,6 +85,29 @@ abstract class ChartOptions {
 
   external factory ChartOptions({String type,
     dynamic width, dynamic height, List<num> margin, num marginTop});
+}
+
+@anonymous
+@JS()
+abstract class AnimationOptions {
+  external num get duration;
+  external set duration(num v);
+
+  external String get easing;
+  external set easing(String v);
+
+  external Function get complete;
+  external set complete(Function v);
+
+  external Function get step;
+  external set step(Function v);
+
+  external factory AnimationOptions({
+    num duration,
+    String easing,
+    Function complete,
+    Function step});
+
 }
 
 @anonymous

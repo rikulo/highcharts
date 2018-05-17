@@ -132,6 +132,22 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
    */
   void update();
 
+  /**
+   * Reflows the chart to its container.
+   * By default, the chart reflows automatically to
+   * its container following a window.resize event,
+   * as per the chart.reflow option. However, there are no reliable events for div resize,
+   * so if the container is resized without a window resize event,
+   * this must be called explicitly.
+   */
+  void reflow();
+
+  /**
+   * Resize the chart to a given width and height.
+   * In order to set the width only, the height argument may be skipped.
+   * To set the height only, pass undefined for the width.
+   */
+  void setSize([num width, num height, AnimationOptions animation]);
 }
 
 abstract class ColumnChart<S extends Comparable, C extends Comparable> implements Chart<S, C, CategoryModel<S, C>> {
@@ -315,10 +331,16 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
 
   @override
   void update() {
-    if (_chart == null)
-      return;
+    _chart?.update(_chartConfig, true);
+  }
 
-    _chart.update(_chartConfig, true);
+  @override
+  void reflow() {
+    _chart?.reflow();
+  }
+
+  void setSize([num width, num height, AnimationOptions animation]) {
+    _chart?.setSize(width, height, animation);
   }
 }
 
