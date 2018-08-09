@@ -20,7 +20,7 @@ abstract class ChartModel<S extends Comparable, C extends Comparable> {
    */
   List<C> get categories;
 
-  // Returns vlaue of provided [series] style
+  // Returns value of provided [series] style
   dynamic getSeriesStyle(S series, SeriesStyle name);
   // Sets value of provided [series] style
   void setSeriesStyle(S series, SeriesStyle name, dynamic value);
@@ -34,13 +34,12 @@ abstract class ChartModel<S extends Comparable, C extends Comparable> {
 abstract class AbstractChartModel<S extends Comparable, C extends Comparable> extends ChartModel<S, C> {
   final _seriesStyle = <S, Map<SeriesStyle, dynamic>>{};
 
-  // Returns vlaue of marker of provided [series]
   @override
   dynamic getSeriesStyle(S series, SeriesStyle name) {
     final kv = _seriesStyle[series];
     return kv != null ? kv[name] : null;
   }
-  // Sets value of marker of provided [series]
+
   @override
   void setSeriesStyle(S series, SeriesStyle name, dynamic value) {
     final kv = _seriesStyle[series] ?? <SeriesStyle, dynamic>{};
@@ -63,6 +62,7 @@ abstract class SingleValueCategoryModel<S extends Comparable, C extends Comparab
   /**
    * Get categories as a collection.
    */
+  @override
   List<C> get categories;
 
   /**
@@ -190,14 +190,10 @@ abstract class DonutModel<S extends Comparable, C extends Comparable> extends Ab
 class DefaultDonutModel<S extends Comparable, C extends Comparable> extends DonutModel<S, C> {
   final _data = <S, SingleValueCategoryModel<S, C>>{};
 
-  /**
-   * Get (series) pairs of this chart data model. The returned
-   */
+  @override
   List<S> get keys => _data.keys.toList();
 
-  /**
-   * Get value of the specified categoryModel
-   */
+  @override
   SingleValueCategoryModel<S, C> getValue(S series) => _data[series];
 
   @override
@@ -209,21 +205,13 @@ class DefaultDonutModel<S extends Comparable, C extends Comparable> extends Donu
     setSeriesStyle(series, SeriesStyle.innerSize, innerSize);
   }
 
-  /**
-   * Get all series as a collection.
-   */
-  List<S> get series {
-    return _data.keys;
-  }
+  @override
+  List<S> get series => _data.keys;
 
-  /**
-   * Get categories as a collection.
-   */
+  @override
   List<C> get categories => <C>[];
 
-  /**
-   * Clear all data
-   */
+  @override
   void clear() {
     super.clear();
 

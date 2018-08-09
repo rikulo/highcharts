@@ -181,6 +181,7 @@ abstract class AreaChart<S extends Comparable, C extends Comparable> extends Cha
 abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   final String type;
+  @override
   final Element element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
 
   _BaseChartImpl(this.type, {String titleText: '', String subtitleText: '',
@@ -339,6 +340,7 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
     _chart?.reflow();
   }
 
+  @override
   void setSize([num width, num height, AnimationOptions animation]) {
     _chart?.setSize(width, height, animation);
   }

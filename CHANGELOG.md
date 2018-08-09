@@ -1,5 +1,8 @@
 # CHANGES
 
+**1.0.0**
+* Dart 2 required
+
 **0.1.1**
 
 * Add implementation of DonutChart, AreaChart, PieChart

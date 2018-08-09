@@ -1,15 +1,13 @@
 name: rikulo_highcharts
-version: 0.1.1
+version: 1.0.0
 authors:
 - Jimmy Shiau <jimmyshiau@potix.com>
 - Jerry Chen <jerrychen@potix.com>
 description: |
   highcharts is a porting of highcharts in Dart.
 homepage: https://github.com/rikulo/highcharts
-documentation: http://www.dartdocs.org/documentation/rikulo_highcharts/0.1.0/index.html
+documentation: http://www.dartdocs.org/documentation/rikulo_highcharts/1.0.0/index.html
 environment:
-  sdk: ">=1.2.0"
+  sdk: ">=2.0.0 <3.0.0"
 dependencies:
   js: any
-dev_dependencies:
-  browser: any

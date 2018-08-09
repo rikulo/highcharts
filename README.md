@@ -3,7 +3,7 @@
 [highcharts](http://rikulo.org) is a wrapper of [Highcharts](https://www.highcharts.com) in Dart.
 
 * [Home](http://rikulo.org)
-* [API Reference](http://www.dartdocs.org/documentation/rikulo_highcharts/0.1.0/index.html)
+* [API Reference](http://www.dartdocs.org/documentation/rikulo_highcharts/1.0.0/index.html)
 * [Git Repository](https://github.com/rikulo/highcharts)
 * [Issues](https://github.com/rikulo/highcharts/issues)
 
