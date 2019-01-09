@@ -206,7 +206,7 @@ class DefaultDonutModel<S extends Comparable, C extends Comparable> extends Donu
   }
 
   @override
-  List<S> get series => _data.keys;
+  List<S> get series => _data.keys.toList();
 
   @override
   List<C> get categories => <C>[];
