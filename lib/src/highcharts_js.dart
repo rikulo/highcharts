@@ -155,12 +155,15 @@ abstract class ChartXAxis {
   external String get tickmarkPlacement;
   external set tickmarkPlacement(String v);
 
+  external String get type;
+  external set type(String v);
+
   external factory ChartXAxis({
     List<dynamic> categories,
     ChartLabels labels,
     bool allowDecimals, ChartCrosshair crosshair, num tickLength,
     String lineColor, num lineWidth, num tickWidth,
-    String tickColor, String tickmarkPlacement});
+    String tickColor, String tickmarkPlacement, String type});
 }
 
 @anonymous
@@ -203,11 +206,15 @@ abstract class ChartYAxis {
   external bool get showFirstLabel;
   external set showFirstLabel(bool v);
 
+  external String get type;
+  external set type(String v);
+
   external factory ChartYAxis({
     ChartTitle title, num min,
     ChartLabels labels,
     String gridLineColor, num tickAmount,
-    num tickInterval, bool showFirstLabel});
+    num tickInterval, bool showFirstLabel,
+    String type});
 }
 
 @anonymous
