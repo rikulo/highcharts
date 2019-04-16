@@ -83,8 +83,14 @@ abstract class ChartOptions {
   external num get marginTop;
   external set marginTop(num v);
 
+  external String get zoomKey;
+  external set zoomKey(String v);
+
+  external String get zoomType;
+  external set zoomType(String v);
+
   external factory ChartOptions({String type,
-    dynamic width, dynamic height, List<num> margin, num marginTop});
+    dynamic width, dynamic height, List<num> margin, num marginTop, String zoomKey, String zoomType});
 }
 
 @anonymous
