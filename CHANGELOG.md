@@ -2,7 +2,7 @@
 
 **1.0.1**
 * Fixed type _CompactIterable<String> is not a subtype of type List<String> for DefaultDonutModel
-* Support zoomKey, zoomType
+* Support zoomKey, zoomType, borderColor, borderWidth
 
 **1.0.0**
 * Dart 2 required

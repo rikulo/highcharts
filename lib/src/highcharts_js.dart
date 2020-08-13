@@ -376,7 +376,8 @@ abstract class PiePlotOptions {
     ChartDataLabels dataLabels,
     bool ignoreHiddenPoint,
     String size, ChartStates states,
-    num startAngle, num endAngle});
+    num startAngle, num endAngle,
+    String borderColor, num borderWidth});
 }
 
 @anonymous
