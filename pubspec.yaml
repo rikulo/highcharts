@@ -1,8 +1,8 @@
 name: rikulo_highcharts
-version: 1.0.1
+version: 2.0.0
 description: Highcharts is a wrapper of highcharts in Dart.
 homepage: https://github.com/rikulo/highcharts
-documentation: http://www.dartdocs.org/documentation/rikulo_highcharts/1.0.0/index.html
+documentation: https://pub.dev/documentation/rikulo_highcharts/latest/
 environment:
   sdk: '>=2.14.0 <3.0.0'
 dependencies:

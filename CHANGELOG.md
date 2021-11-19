@@ -1,5 +1,8 @@
 # CHANGES
 
+**2.0.0**
+* Migrate to null safety
+
 **1.0.1**
 * Fixed type _CompactIterable<String> is not a subtype of type List<String> for DefaultDonutModel
 * Support zoomKey, zoomType, borderColor, borderWidth
