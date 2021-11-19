@@ -5,7 +5,7 @@ import "dart:js";
 import 'dart:js_util';
 
 
-import 'package:rikulo_highcharts/highcharts.dart';
+import 'package:rikulo_highcharts/rikulo_highcharts.dart';
 
 void main() {
   if  (context['Highcharts'] == null) {
