@@ -4,7 +4,8 @@
 library highcharts.src.chart_model;
 
 enum SeriesStyle { 
-  color, borderRadius, fillOpacity, size, innerSize, lineColor,
+  name, color, colorByPoint, borderRadius, fillOpacity,
+  size, innerSize, lineColor, dataLabels, sliced, selected,
   markerLineColor, markerSymbol, markerFillColor, markerLineWidth // marker
 }
 
@@ -36,8 +37,7 @@ abstract class AbstractChartModel<S extends Comparable, C extends Comparable> ex
 
   @override
   dynamic getSeriesStyle(S series, SeriesStyle name) {
-    final kv = _seriesStyle[series];
-    return kv != null ? kv[name] : null;
+    return _seriesStyle[series]?[name];
   }
 
   @override
@@ -69,20 +69,26 @@ abstract class SingleValueCategoryModel<S extends Comparable, C extends Comparab
    * Get value of the specified category.
    * [category] the pie category.
    */
-  num getValue(C category);
+  num? getValue(C category);
 
   /**
    * add or update the value of a specified category.
    * [category] the pie category.
    * [value] the pie value.
    */
-  void setValue(C category, num value);
+  void setValue(C category, num? value);
 
-  // Sets color
-  String getValueColor(C category);
+  // Returns color of [category] style
+  String? getValueColor(C category);
 
   // Sets color
   void setValueColor(C category, String color);
+
+  // Returns value of [category] style
+  dynamic getValueStyle(C category, SeriesStyle name);
+
+  // Sets color
+  void setValueStyle(C category, SeriesStyle name, dynamic value);
 
   // Returns value of [series] style
   dynamic getSingleSeriesStyle(SeriesStyle name);
@@ -92,8 +98,9 @@ abstract class SingleValueCategoryModel<S extends Comparable, C extends Comparab
 }
 
 class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChartModel<String, C> implements SingleValueCategoryModel<String, C> {
-  final _data = <C, num>{};
+  final _data = <C, num?>{};
   final _color = <C, String>{};
+  final _categoryStyle = <C, Map<SeriesStyle, dynamic>>{};
 
   /**
    * Get all series as a collection.
@@ -114,7 +121,7 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChar
    * [category] the pie category.
    */
   @override
-  num getValue(C category) => _data[category];
+  num? getValue(C category) => _data[category];
 
   /**
    * add or update the value of a specified category.
@@ -122,18 +129,30 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChar
    * [value] the pie value.
    */
   @override
-  void setValue(C category, num value) {
+  void setValue(C category, num? value) {
     _data[category] = value;
   }
 
   // Sets color
   @override
-  String getValueColor(C category) => _color[category];
+  String? getValueColor(C category) => _color[category];
 
   // Sets color of provided [series]
   @override
   void setValueColor(C category, String color) {
     _color[category] = color;
+  }
+
+  @override
+  dynamic getValueStyle(C category, SeriesStyle name) {
+    return _categoryStyle[category]?[name];
+  }
+
+  @override
+  void setValueStyle(C category, SeriesStyle name, dynamic value) {
+    final kv = _categoryStyle[category] ?? <SeriesStyle, dynamic>{};
+    kv[name] = value;
+    _categoryStyle[category] = kv;
   }
 
   /**
@@ -145,6 +164,7 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChar
 
     _data.clear();
     _color.clear();
+    _categoryStyle.clear();
   }
 
   @override
@@ -157,7 +177,7 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChar
     return super.setSeriesStyle(SingleValueCategoryModel.DEFAULT_SERIES, name, value);
   }
 
-  // Returns vlaue of marker of provided [series]
+  // Returns value of marker of provided [series]
   @override
   dynamic getSeriesStyle(String series, SeriesStyle name) {
     assert(false, "shouldn't call this methid, use [getSingleSeriesStyle] instead.");
@@ -181,7 +201,7 @@ abstract class DonutModel<S extends Comparable, C extends Comparable> extends Ab
   /**
    * Get value of the specified categoryModel
    */
-  SingleValueCategoryModel<S, C> getValue(S series);
+  SingleValueCategoryModel<S, C>? getValue(S series);
 
   void addSeries(S series, SingleValueCategoryModel<S, C> model, {
     String size, String innerSize});
@@ -194,11 +214,11 @@ class DefaultDonutModel<S extends Comparable, C extends Comparable> extends Donu
   List<S> get keys => _data.keys.toList();
 
   @override
-  SingleValueCategoryModel<S, C> getValue(S series) => _data[series];
+  SingleValueCategoryModel<S, C>? getValue(S series) => _data[series];
 
   @override
   void addSeries(S series, SingleValueCategoryModel<S, C> model, {
-    String size, String innerSize}) {
+    String? size, String? innerSize}) {
     _data[series] = model;
 
     setSeriesStyle(series, SeriesStyle.size, size);
@@ -234,7 +254,7 @@ abstract class CategoryModel<S extends Comparable, C extends Comparable> extends
    * [series] - the series
    * [category] -  the category.
    */
-  num getValue(S series, C category);
+  num? getValue(S series, C category);
 
   /**
    * add or update the value of a specified series and category.
@@ -243,17 +263,21 @@ abstract class CategoryModel<S extends Comparable, C extends Comparable> extends
    * [value] - the value
    */
   void setValue(S series, C category, num value);
+
 }
 
-class DefaultCategoryModel<S extends Comparable, C extends Comparable> extends AbstractChartModel<S, C> implements CategoryModel<S, C> {
+class DefaultCategoryModel<S extends Comparable, C extends Comparable>
+    extends AbstractChartModel<S, C> implements CategoryModel<S, C> {
 
-  var _data = <S, Map<C, num>>{};
+  final _data = <S, Map<C, num?>>{};
+
+  List<C>? _categories;
 
   @override
   List<List> get keys {
-    var list = <List>[];
-    for (S series in series) {
-      for (C category in categories) {
+    final list = <List>[];
+    for (final series in series) {
+      for (final category in categories) {
         list.add([series, category]);
       }
     }
@@ -267,20 +291,27 @@ class DefaultCategoryModel<S extends Comparable, C extends Comparable> extends A
   @override
   List<C> get categories {
     if (_categories != null)
-      return _categories;
+      return _categories!;
+
+    if (_data.isEmpty)
+      return const [];
 
     //merge all categories
-    var list = <C>[];
-    for (S series in series) {
-      List<C> categories = _data[series].keys.toList();
+    final list = <C>[];
+    for (final series in series) {
+      final categoryData = _data[series];
+      if (categoryData == null)
+        continue;
+
+      final categories = categoryData.keys.toList();
       if (list.isEmpty) {
         list.addAll(categories);
         continue;
       }
 
       while (categories.isNotEmpty) {
-        C cate = categories.firstWhere(list.contains, orElse: () => null);
-        int i = categories.indexOf(cate);
+        final cate = categories.cast<C?>().firstWhere(list.contains, orElse: () => null);
+        var i = cate != null ? categories.indexOf(cate): -1;
         categories.removeAt(i);
         while (i > 0) {
           list.add(categories.removeAt(0));
@@ -292,28 +323,28 @@ class DefaultCategoryModel<S extends Comparable, C extends Comparable> extends A
     return _categories = list;
   }
 
-  List<C> _categories;
+
 
   @override
-  num getValue(S series, C category) {
-    return _data[series][category];
+  num? getValue(S series, C category) {
+    return _data[series]?[category];
   }
 
   @override
-  void setValue(S series, C category, num value) {
-    Map<C, num> map = _data[series] ?? <C, num>{};
+  void setValue(S series, C category, num ?value) {
+    final map = _data[series] ?? <C, num?>{};
     map[category] = value;
     _data[series] = map;
 
     _categories = null;//clear cache
   }
 
+
   @override
   void clear() {
     super.clear();
-    
-    _seriesStyle.clear();
 
+    _data.clear();
     _categories = null;//clear cache
   }
 }

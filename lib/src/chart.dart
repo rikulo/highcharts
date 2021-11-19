@@ -4,8 +4,7 @@
 library highcharts.src.chart;
 
 import 'dart:html';
-import 'dart:js' show JsObject;
-import "package:js/js.dart" show allowInteropCaptureThis;
+import 'dart:js' show allowInteropCaptureThis;
 
 import 'chart_model.dart';
 import 'highcharts_js.dart';
@@ -24,48 +23,48 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
   /**
    * Returns model
    */
-  T get model;
+  T? get model;
 
   /**
    * Sets model
    */
-  void set model(T model);
+  void set model(T? model);
 
   /**
    * Returns title of chart
    */
-  ChartTitle get title;
+  ChartTitle? get title;
   /**
    * Sets title of chart
    */
-  void set title(ChartTitle title);
+  void set title(ChartTitle? title);
 
   /**
    * Returns subtitle of chart
    */
-  ChartTitle get subtitle;
+  ChartTitle? get subtitle;
   /**
    * Sets subtitle of chart
    */
-  void set subtitle(ChartTitle subtitle);
+  void set subtitle(ChartTitle? subtitle);
 
   /**
    * Returns xAxis of chart
    */
-  ChartXAxis get xAxis;
+  ChartXAxis? get xAxis;
   /**
    * Sets xAxis of chart
    */
-  void set xAxis(ChartXAxis xAxis);
+  void set xAxis(ChartXAxis? xAxis);
 
   /**
    * Returns yAxis of chart
    */
-  ChartYAxis get yAxis;
+  ChartYAxis? get yAxis;
   /**
    * Sets yAxis of chart
    */
-  void set yAxis(ChartYAxis yAxis);
+  void set yAxis(ChartYAxis? yAxis);
 
   /**
    * Returns width of chart
@@ -88,48 +87,50 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
   /**
    * Returns chartOptions of chart
    */
-  ChartOptions get chartOptions;
+  ChartOptions? get chartOptions;
   /**
    * Sets the chartOptions of chart
    */
-  void set chartOptions(ChartOptions options);
+  void set chartOptions(ChartOptions? options);
 
   /**
    * Returns plotOptions of chart
    */
-  ChartPlotOptions get plotOptions;
+  ChartPlotOptions? get plotOptions;
   /**
    * Sets plotOptions of chart
    */
-  void set plotOptions(ChartPlotOptions plotOptions);
+  void set plotOptions(ChartPlotOptions? plotOptions);
 
   /**
    * Returns legend of chart
    */
-  ChartLegend get legend;
+  ChartLegend? get legend;
   /**
    * Sets legend of chart
    */
-  void set legend(ChartLegend legend);
+  void set legend(ChartLegend? legend);
 
   /**
    * Returns tooltip of chart
    */
-  ChartTooltip get tooltip;
+  ChartTooltip? get tooltip;
 
   /**
    * Sets tooltip of chart
    */
-  void set tooltip(ChartTooltip tooltip);
+  void set tooltip(ChartTooltip? tooltip);
 
-  /**
-   * Render chart with chart model
-   */
+  ///Returns accessibility of chart
+  ChartAccessibility? get accessibility;
+
+  ///Sets accessibility of chart
+  void set accessibility(ChartAccessibility? accessibility);
+
+  ///Render chart with chart model
   void render();
 
-  /**
-   * update chart's data and redraw
-   */
+  ///update chart's data and redraw
   void update();
 
   /**
@@ -152,29 +153,29 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
 
 abstract class ColumnChart<S extends Comparable, C extends Comparable> implements Chart<S, C, CategoryModel<S, C>> {
   factory ColumnChart({String titleText: '', String subtitleText: '',
-    dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-    => new _ColumnChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
+    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
+    => _ColumnChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
         width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
 abstract class PieChart<S extends Comparable, C extends Comparable> extends Chart<S, C, SingleValueCategoryModel<S, C>> {
   factory PieChart({String titleText: '', String subtitleText: '',
-  dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-  => new _PieChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
+  dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
+  => _PieChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
 abstract class DonutChart<S extends Comparable, C extends Comparable> extends Chart<S, C, DonutModel<S, C>> {
   factory DonutChart({String titleText: '', String subtitleText: '',
-  dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-  => new _DonutChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
+  dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
+  => _DonutChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
 abstract class AreaChart<S extends Comparable, C extends Comparable> extends Chart<S, C, CategoryModel<S, C>> {
   factory AreaChart({String titleText: '', String subtitleText: '',
-  dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis})
-  => new _AreaChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
+  dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
+  => _AreaChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
@@ -182,10 +183,10 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
 
   final String type;
   @override
-  final Element element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
+  final element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
 
   _BaseChartImpl(this.type, {String titleText: '', String subtitleText: '',
-      dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
+      dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
     this._titleText = titleText,
     this._subtitleText = subtitleText,
     this._width = width,
@@ -197,17 +198,18 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
 
   String _titleText, _subtitleText;
 
-  ChartTitle _title, _subtitle;
+  ChartTitle? _title, _subtitle;
 
-  ChartXAxis _xAxis;
-  ChartYAxis _yAxis;
-  ChartOptions _chartOptions;
-  ChartPlotOptions _plotOptions;
-  ChartLegend _legend;
-  ChartTooltip _tooltip;
+  ChartXAxis? _xAxis;
+  ChartYAxis? _yAxis;
+  ChartOptions? _chartOptions;
+  ChartPlotOptions? _plotOptions;
+  ChartLegend? _legend;
+  ChartTooltip? _tooltip;
+  ChartAccessibility? _accessibility;
 
-  HighChart _chart;
-  T _model;
+  HighChart? _chart;
+  T? _model;
 
   @override
   dynamic get width => _width;
@@ -224,80 +226,88 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
   }
 
   @override
-  ChartTitle get title => _title;
+  ChartTitle? get title => _title;
   @override
-  void set title(ChartTitle title) {
+  void set title(ChartTitle? title) {
     _title = title;
   }
 
   @override
-  ChartTitle get subtitle => _subtitle;
+  ChartTitle? get subtitle => _subtitle;
   @override
-  void set subtitle(ChartTitle subtitle) {
+  void set subtitle(ChartTitle? subtitle) {
     _subtitle = subtitle;
   }
 
   @override
-  ChartXAxis get xAxis => _xAxis;
+  ChartXAxis? get xAxis => _xAxis;
   @override
-  void set xAxis(ChartXAxis xAxis) {
+  void set xAxis(ChartXAxis? xAxis) {
     this._xAxis = xAxis;
   }
 
   @override
-  ChartYAxis get yAxis => _yAxis;
+  ChartYAxis? get yAxis => _yAxis;
   @override
-  void set yAxis(ChartYAxis yAxis) {
+  void set yAxis(ChartYAxis? yAxis) {
     this._yAxis = yAxis;
   }
 
   @override
-  ChartPlotOptions get plotOptions => _plotOptions;
+  ChartPlotOptions? get plotOptions => _plotOptions;
   @override
-  void set plotOptions(ChartPlotOptions plotOptions) {
+  void set plotOptions(ChartPlotOptions? plotOptions) {
     _plotOptions = plotOptions;
   }
 
   ChartOptions get _defaultChartOptions
-  => new ChartOptions(type: type, width: width, height: height);
+  => ChartOptions(type: type, width: width, height: height);
 
   @override
-  ChartOptions get chartOptions => _chartOptions ?? _defaultChartOptions;
+  ChartOptions? get chartOptions => _chartOptions ?? _defaultChartOptions;
   @override
-  void set chartOptions(ChartOptions options) {
+  void set chartOptions(ChartOptions? options) {
     _chartOptions = options;
   }
 
   @override
-  ChartLegend get legend => _legend;
+  ChartLegend? get legend => _legend;
   @override
-  void set legend(ChartLegend legend) {
+  void set legend(ChartLegend? legend) {
     _legend = legend;
   }
 
   @override
-  ChartTooltip get tooltip => _tooltip;
+  ChartTooltip? get tooltip => _tooltip;
   @override
-  void set tooltip(ChartTooltip tooltip) {
+  void set tooltip(ChartTooltip? tooltip) {
     this._tooltip = tooltip;
   }
 
+  @override
+  ChartAccessibility? get accessibility => _accessibility;
+
+  @override
+  void set accessibility(ChartAccessibility? accessibility) {
+    this._accessibility = accessibility;
+  }
+
   ChartConfiguration get _chartConfig {
-    return new ChartConfiguration(
-      chart: chartOptions,
-      title: new ChartTitle(text: _titleText),
-      subtitle: new ChartTitle(text: _subtitleText),
+    return ChartConfiguration(
+      chart: chartOptions!,
+      title: ChartTitle(text: _titleText),
+      subtitle: ChartTitle(text: _subtitleText),
       xAxis: xAxis, yAxis: yAxis,
-      credits: new ChartCredits(enabled: false),
+      credits: ChartCredits(enabled: false),
       series: series);
   }
 
   List<ChartDataSets> get series;
 
   @override
-  T get model => _model;
+  T? get model => _model;
   @override
-  void set model(T model) {
+  void set model(T? model) {
     if (model is! T)
       return;
 
@@ -312,22 +322,24 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
 
     if (_chart == null)
       _initChart();
-
   }
 
   void _initChart() {
-    ChartConfiguration config = _chartConfig;
+    final config = _chartConfig;
 
     if (tooltip != null)
-      config.tooltip = tooltip;
+      config.tooltip = tooltip!;
 
     if (legend != null)
-      config.legend = legend;
+      config.legend = legend!;
 
     if (plotOptions != null)
-      config.plotOptions = plotOptions;
+      config.plotOptions = plotOptions!;
 
-    _chart = new HighChart(element, config);
+    if (accessibility != null)
+      config.accessibility = accessibility!;
+
+    _chart = HighChart(element, config);
   }
 
   @override
@@ -341,32 +353,38 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
   }
 
   @override
-  void setSize([num width, num height, AnimationOptions animation]) {
+  void setSize([num? width, num? height, AnimationOptions? animation]) {
     _chart?.setSize(width, height, animation);
   }
 }
 
-class _ColumnChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements ColumnChart<S, C> {
+class _ColumnChartImpl<S extends Comparable, C extends Comparable>
+  extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements ColumnChart<S, C> {
 
-  _ColumnChartImpl({String titleText, String subtitleText,
-    dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
+  _ColumnChartImpl({String titleText: '', String subtitleText: '',
+    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.column, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
   @override
   List<ChartDataSets> get series {
-    final list = <ChartDataSets>[];
-    final data = <S, List<int>>{};
+    final model = this.model;
+    if (model == null)
+      return <ChartDataSets>[];
 
-    for (List entry in model.keys) {
-      final series = entry[0], category = entry[1];
-      final values = data[series] ?? <int>[];
+    final list = <ChartDataSets>[],
+      data = <S, List<num?>>{};
+
+    for (final entry in model.keys) {
+      final series = entry[0], category = entry[1],
+        values = data[series] ?? <num?>[];
+
       values.add(model.getValue(series, category));
       data[series] = values;
     }
 
-    for (S series in data.keys)
-      list.add(new ChartDataSets(
+    for (final series in data.keys)
+      list.add(ChartDataSets(
         name: series.toString(),
         color: model.getSeriesStyle(series, SeriesStyle.color),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
@@ -378,92 +396,129 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable> extends _Base
 
 }
 
-class _PieChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, SingleValueCategoryModel<S, C>> implements PieChart<S, C> {
+class _PieChartImpl<S extends Comparable, C extends Comparable>
+  extends _BaseChartImpl<S, C, SingleValueCategoryModel<S, C>> implements PieChart<S, C> {
 
-  _PieChartImpl({String titleText, String subtitleText,
-    dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
+  _PieChartImpl({String titleText: '', String subtitleText: '',
+    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis) {
   }
 
   @override
   List<ChartDataSets> get series {
-    final singleCategoryModel = model;
-    final seriesData = <ChartInnerDataSets>[];
+    final model = this.model,
+      seriesData = <ChartInnerDataSets>[];
 
-    for (final category in singleCategoryModel.categories) {
-      seriesData.add(new ChartInnerDataSets(
+    if (model == null)
+      return [];
+
+    for (final category in model.categories) {
+      seriesData.add(ChartInnerDataSets(
         name: category.toString(),
-        y: singleCategoryModel.getValue(category),
-        color: singleCategoryModel.getValueColor(category)));
+        y: model.getValue(category),
+        color: model.getValueColor(category),
+        sliced: model.getValueStyle(category, SeriesStyle.sliced),
+        selected: model.getValueStyle(category, SeriesStyle.selected),
+      ));
     }
 
-    return [new ChartDataSets(
-      innerSize: model.getSingleSeriesStyle(SeriesStyle.innerSize),
-      data: seriesData
-    )];
+    final name = model.getSingleSeriesStyle(SeriesStyle.name),
+        colorByPoint = model.getSingleSeriesStyle(SeriesStyle.colorByPoint) ?? true,
+      innerSize = model.getSingleSeriesStyle(SeriesStyle.innerSize),
+      dataLabels = model.getSingleSeriesStyle(SeriesStyle.dataLabels);
+
+    //Cannot set a null dataLabels to ChartDataSets(dataLabels: dataLabels)
+    return [dataLabels != null ?
+      ChartDataSets(
+        name: name, colorByPoint: colorByPoint,
+        innerSize: innerSize,
+        dataLabels: dataLabels,
+        data: seriesData):
+      ChartDataSets(
+        name: name, colorByPoint: colorByPoint,
+        innerSize: innerSize,
+        data: seriesData)];
   }
 }
 
-class _DonutChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, DonutModel<S, C>> implements DonutChart<S, C> {
+class _DonutChartImpl<S extends Comparable, C extends Comparable>
+  extends _BaseChartImpl<S, C, DonutModel<S, C>> implements DonutChart<S, C> {
 
-  _DonutChartImpl({String titleText, String subtitleText,
-    dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
+  _DonutChartImpl({String titleText: '', String subtitleText: '',
+    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
   @override
   List<ChartDataSets> get series {
-    final seriesDatas = <ChartDataSets>[];
+    final model = this.model;
+    if (model == null)
+      return <ChartDataSets>[];
 
+    final seriesDatas = <ChartDataSets>[];
     for (final key in model.keys) {
-      final singleCategoryModel = model.getValue(key);
-      final seriesData = <ChartInnerDataSets>[];
+      final singleCategoryModel = model.getValue(key),
+        seriesData = <ChartInnerDataSets>[];
+
+      if (singleCategoryModel == null)
+        continue;
 
       for (final category in singleCategoryModel.categories) {
-        seriesData.add(new ChartInnerDataSets(
+        seriesData.add(ChartInnerDataSets(
           name: category.toString(),
           y: singleCategoryModel.getValue(category),
           color: singleCategoryModel.getValueColor(category),
           visible: singleCategoryModel.getValueColor(category) != null));
       }
 
-      seriesDatas.add(new ChartDataSets(
-        size: model.getSeriesStyle(key, SeriesStyle.size),
-        innerSize: model.getSeriesStyle(key, SeriesStyle.innerSize),
-        data: seriesData
-      ));
+      final size = model.getSeriesStyle(key, SeriesStyle.size),
+        innerSize =  model.getSeriesStyle(key, SeriesStyle.innerSize),
+        dataLabels = model.getSeriesStyle(key, SeriesStyle.dataLabels);
+
+      //Cannot set a null dataLabels to ChartDataSets(dataLabels: dataLabels)
+      seriesDatas.add(dataLabels != null ?
+        ChartDataSets(size: size, innerSize: innerSize,
+          dataLabels: dataLabels, data: seriesData):
+        ChartDataSets(size: size, innerSize: innerSize,
+          data: seriesData));
     }
 
     return seriesDatas;
   }
 }
 
-class _AreaChartImpl<S extends Comparable, C extends Comparable> extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements AreaChart<S, C> {
+class _AreaChartImpl<S extends Comparable, C extends Comparable>
+  extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements AreaChart<S, C> {
 
-  _AreaChartImpl({String titleText, String subtitleText,
-    dynamic width, dynamic height, ChartXAxis xAxis, ChartYAxis yAxis}):
+  _AreaChartImpl({String titleText: '', String subtitleText: '',
+    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.area, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 
   @override
   List<ChartDataSets> get series {
-    final list = <ChartDataSets>[];
-    final data = <S, List<int>>{};
+    final model = this.model;
+    if (model == null)
+      return <ChartDataSets>[];
 
-    for (List entry in model.keys) {
-      final series = entry[0], category = entry[1];
-      final values = data[series] ?? <int>[];
+    final list = <ChartDataSets>[],
+      data = <S, List<num?>>{};
+
+    for (final entry in model.keys) {
+      final series = entry[0], category = entry[1],
+        values = data[series] ?? <num?>[];
+
       values.add(model.getValue(series, category));
       data[series] = values;
     }
 
-    for (S series in data.keys)
-      list.add(new ChartDataSets(
+    for (final series in data.keys)
+      list.add(ChartDataSets(
         name: series.toString(),
         color: model.getSeriesStyle(series, SeriesStyle.color),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
-        marker: new ChartMarker(
+        marker: ChartMarker(
           symbol: model.getSeriesStyle(series, SeriesStyle.markerSymbol),
           fillColor: model.getSeriesStyle(series, SeriesStyle.markerFillColor),
           lineColor: model.getSeriesStyle(series, SeriesStyle.markerLineColor) ?? '#ffffff', // charts default value
@@ -476,24 +531,11 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable> extends _BaseCh
     return list;
   }
 }
-///in dart2js: native js object place in 'o' property
-jsProperty(o, String key) => (_toJsObject(o)['o'] ?? _toJsObject(o))[key];
-JsObject _toJsObject(o) => new JsObject.fromBrowserObject(o);
-//in dart2js: js Date object will be JsObject not DateTime object
-DateTime jsDate(o, String key) {
-  var val = jsProperty(o, key);
-
-  //dart2js only: do val.toString() for make val['date'] accessable
-  if (val is JsObject && val.toString().isNotEmpty)
-    val = val['date'];
-
-  return val is DateTime ? val: null;
-}
 
 Function jsFunction(Function f) => allowInteropCaptureThis(f);
 
 Element _createUncheckedHtml(String html)
-=> new Element.html(html, treeSanitizer: NodeTreeSanitizer.trusted);
+=> Element.html(html, treeSanitizer: NodeTreeSanitizer.trusted);
 
 
 
@@ -563,10 +605,7 @@ _chart = new HighChart(div, new ChartConfiguration(
           return y > 1 ? '<b>${_jsProp(_jsProp(self, 'point'), 'name')}</b> $y%': null;
         })), startAngle: 90, endAngle: 360)]
 ));
-
-_jsProp(o, String key) => JsNative.getProperty(o, key);
 */
-
 /* area chart sample
 new HighChart(div, new ChartConfiguration(
     chart: new ChartOptions(type: 'area'),

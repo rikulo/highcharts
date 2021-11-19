@@ -26,3 +26,6 @@ packages
 packages/
 pubspec.lock
 .pub
+highcharts.iml
+.dart_tool
+example/build

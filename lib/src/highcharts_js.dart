@@ -6,13 +6,19 @@ library highcharts.src.highcharts_js;
 
 import "package:js/js.dart";
 
+
+@JS('Highcharts')
+class Highcharts {
+  external static ChartOptionsStatic getOptions();
+}
+
 @JS('Highcharts.chart')
 class HighChart {
 
   external void redraw();
   external void update(ChartConfiguration options, bool redraw);
   external void reflow();
-  external void setSize(num width, num height, AnimationOptions animation);
+  external void setSize(num? width, num? height, AnimationOptions? animation);
 
   external factory HighChart(dynamic container, ChartConfiguration options);
 }
@@ -50,6 +56,9 @@ abstract class ChartConfiguration {
   external ChartPlotOptions get plotOptions;
   external set plotOptions(ChartPlotOptions v);
 
+  external ChartAccessibility get accessibility;
+  external set accessibility(ChartAccessibility v);
+
   external List<ChartDataSets> get series;
   external set series(List<ChartDataSets> v);
 
@@ -57,12 +66,20 @@ abstract class ChartConfiguration {
     ChartOptions chart,
     ChartTitle title,
     ChartTitle subtitle,
-    ChartXAxis xAxis, ChartYAxis yAxis,
+    ChartXAxis? xAxis, ChartYAxis? yAxis,
     ChartCredits credits,
     ChartLegend legend,
     ChartTooltip tooltip,
     ChartPlotOptions plotOptions,
+    ChartAccessibility accessibility,
     List<ChartDataSets> series});
+}
+
+@anonymous
+@JS()
+class ChartOptionsStatic {
+  external List<String> get colors;
+  external List<String> get symbols;
 }
 
 @anonymous
@@ -131,8 +148,8 @@ abstract class ChartXAxis {
   external List<dynamic> get categories;
   external set categories(List<dynamic> v);
 
-  external ChartCrosshair get crosshair;
-  external set crosshair(ChartCrosshair v);
+  external dynamic get crosshair;
+  external set crosshair(dynamic v);
 
   external bool get allowDecimals;
   external set allowDecimals(bool v);
@@ -164,12 +181,16 @@ abstract class ChartXAxis {
   external String get type;
   external set type(String v);
 
+  external ChartAccessibility get accessibility;
+  external set accessibility(ChartAccessibility v);
+
   external factory ChartXAxis({
     List<dynamic> categories,
     ChartLabels labels,
-    bool allowDecimals, ChartCrosshair crosshair, num tickLength,
+    bool allowDecimals, dynamic crosshair, num tickLength,
     String lineColor, num lineWidth, num tickWidth,
-    String tickColor, String tickmarkPlacement, String type});
+    String tickColor, String tickmarkPlacement, String type,
+    ChartAccessibility accessibility});
 }
 
 @anonymous
@@ -215,12 +236,15 @@ abstract class ChartYAxis {
   external String get type;
   external set type(String v);
 
+  external ChartAccessibility get accessibility;
+  external set accessibility(ChartAccessibility v);
+
   external factory ChartYAxis({
     ChartTitle title, num min,
     ChartLabels labels,
     String gridLineColor, num tickAmount,
     num tickInterval, bool showFirstLabel,
-    String type});
+    String type, ChartAccessibility accessibility});
 }
 
 @anonymous
@@ -333,6 +357,61 @@ abstract class ChartPlotOptions {
 
 @anonymous
 @JS()
+abstract class ChartAccessibility {
+
+
+  external String get description;
+  external set description(String v);
+
+  external String get rangeDescription;
+  external set rangeDescription(String v);
+
+  external bool get enabled;
+  external set enabled(bool v);
+
+  external ChartAccessibilityPoint get point;
+  external set point(ChartAccessibilityPoint v);
+
+
+  external factory ChartAccessibility({bool? enabled,
+    String? description, String? rangeDescription,
+    ChartAccessibilityPoint? point});
+}
+
+@anonymous
+@JS()
+abstract class ChartAccessibilityPoint {
+
+  external String get dateFormat;
+  external set dateFormat(String v);
+
+  external Function get dateFormatter;
+  external set dateFormatter(Function v);
+
+  external Function get descriptionFormatter;
+  external set descriptionFormatter(Function v);
+
+  external num get valueDecimals;
+  external set valueDecimals(num v);
+
+  external String get valueDescriptionFormat;
+  external set valueDescriptionFormat(String v);
+
+  external String get valuePrefix;
+  external set valuePrefix(String v);
+
+  external String get valueSuffix;
+  external set valueSuffix(String v);
+
+
+  external factory ChartAccessibilityPoint({
+    String? dateFormat, Function? dateFormatter, Function? descriptionFormatter,
+    num? valueDecimals, String? valueDescriptionFormat,
+    String? valuePrefix, String? valueSuffix});
+}
+
+@anonymous
+@JS()
 abstract class PiePlotOptions {
 
   external String get cursor;
@@ -374,6 +453,7 @@ abstract class PiePlotOptions {
     bool showInLegend,
     List<dynamic> center,
     ChartDataLabels dataLabels,
+    bool allowPointSelect,
     bool ignoreHiddenPoint,
     String size, ChartStates states,
     num startAngle, num endAngle,
@@ -386,6 +466,15 @@ abstract class AreaPlotOptions {
 
   external num get pointStart;
   external set pointStart(num v);
+
+  external num get pointInterval;
+  external set pointInterval(num v);
+
+  external String get pointIntervalUnit;
+  external set pointIntervalUnit(String v);
+
+  external dynamic get pointPlacement;
+  external set pointPlacement(v);
 
   external ChartMarker get marker;
   external set marker(ChartMarker v);
@@ -400,8 +489,10 @@ abstract class AreaPlotOptions {
   external set lineColor(String v);
 
   external factory AreaPlotOptions({
-    num radius, ChartMarker marker,
-    String stacking, num lineWidth, String lineColor});
+    num pointStart, num pointInterval,
+    String pointIntervalUnit, pointPlacement,
+    ChartMarker marker, String stacking,
+    num lineWidth, String lineColor});
 }
 
 @anonymous
@@ -448,9 +539,9 @@ abstract class ChartMarker {
   external set lineWidth(num v);
 
   external factory ChartMarker({
-    bool enabled, String symbol, num radius,
-    ChartStates states,
-    String fillColor, String lineColor, num lineWidth});
+    bool? enabled, String? symbol, num? radius,
+    ChartStates? states,
+    String? fillColor, String? lineColor, num? lineWidth});
 }
 
 @anonymous
@@ -523,10 +614,10 @@ abstract class ChartDataLabels {
   external set formatter(Function v);
 
   external factory ChartDataLabels({
-    String color,
-    bool enabled,
-    num distance,
-    Function formatter});
+    String? color,
+    bool? enabled,
+    num? distance,
+    Function? formatter});
 
 }
 
@@ -566,6 +657,9 @@ abstract class ChartDataSets {
   external bool get visible;
   external set visible(bool v);
 
+  external bool get colorByPoint;
+  external set colorByPoint(bool v);
+
   external ChartDataLabels get dataLabels;
   external set dataLabels(ChartDataLabels v);
 
@@ -585,15 +679,14 @@ abstract class ChartDataSets {
   external set lineColor(String v);
 
   external factory ChartDataSets({
-    String name, String color, num y,
-    String size, String innerSize,
-    bool visible,
-    num startAngle, num endAngle,
-    num borderRadius, num borderWidth,
-    String stack,
-    ChartDataLabels dataLabels,
-    List<dynamic> data, ChartMarker marker,
-    num fillOpacity, num lineWidth, String lineColor});
+    String? name, String? color, num? y,
+    String? size, String? innerSize,
+    bool? visible, bool? colorByPoint,
+    num? startAngle, num? endAngle,
+    num? borderRadius, num? borderWidth, String? stack,
+    ChartDataLabels? dataLabels,
+    List<dynamic>? data, ChartMarker? marker,
+    num? fillOpacity, num? lineWidth, String? lineColor});
 }
 
 @anonymous
@@ -611,6 +704,13 @@ abstract class ChartInnerDataSets {
   external bool get visible;
   external set visible(bool v);
 
+  external bool get sliced;
+  external set sliced(bool v);
+
+  external bool get selected;
+  external set selected(bool v);
+
   external factory ChartInnerDataSets({
-  String name, num y, String color, bool visible});
+    String name, num? y, String? color,
+    bool? visible, bool? sliced, bool? selected});
 }
