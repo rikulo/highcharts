@@ -28,8 +28,8 @@ Add this lines to the main html of your application (index.html) in the head sec
 
 You can create a chart object and chart model.
 
-	  import 'dart:html';
-    import 'package:rikulo_highcharts/highcharts.dart';
+    import 'dart:html';
+    import 'package:rikulo_highcharts/rikulo_highcharts.dart';
 
     main() {
       ColumnChart chart = new ColumnChart();
