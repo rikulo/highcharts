@@ -103,9 +103,12 @@ void _renderColumnChart(ColumnChart chart) {
       ));
 
   chart.plotOptions = ChartPlotOptions(
-      column: ChartColumn(
+      column: ColumnPlotOptions(
         pointPadding: 0.2,
-        borderWidth: 0));
+        borderWidth: 0,
+        events: EventPlotOptions(legendItemClick: jsFunction((self, _) {
+          print(getProperty(self, 'color'));
+        }))));
 
   chart.tooltip = ChartTooltip(
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -145,10 +148,14 @@ void _renderPieChart(PieChart chart) {
 
   chart.plotOptions = ChartPlotOptions(
       pie: PiePlotOptions(
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: ChartDataLabels(enabled: false),
-          showInLegend: true));
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: ChartDataLabels(enabled: false),
+        showInLegend: true,
+        showCheckbox: true,
+        events: EventPlotOptions(checkboxClick: jsFunction((self, event) {
+          print('${getProperty(self, 'name')} ${getProperty(event, 'checked')}');
+        }))));
 
   chart.model = model;
   chart.update();
@@ -212,7 +219,10 @@ void _renderDonutChart(DonutChart chart) {
 
   chart.plotOptions = ChartPlotOptions(
       pie: PiePlotOptions(shadow: false,
-          center: ['50%', '50%']));
+          center: ['50%', '50%'],
+          events: EventPlotOptions(click: jsFunction((self, _) {
+            print(getProperty(self, 'name'));
+          }))));
 
   chart.tooltip = ChartTooltip(valueSuffix: '%');
 
@@ -280,7 +290,7 @@ void _renderAreaChart(AreaChart chart) {
 
   chart.xAxis = ChartXAxis(
     allowDecimals: false,
-    labels: ChartLabels(formatter: jsFunction((self, _) {
+    labels: ChartLabels(formatter: jsFunction((self) {
       return getProperty(self, 'value');// clean, unformatted number for year
     })),
     accessibility: ChartAccessibility(
@@ -289,7 +299,7 @@ void _renderAreaChart(AreaChart chart) {
   chart.yAxis = ChartYAxis(
     title: ChartTitle(
       text: 'Nuclear weapon states'),
-    labels: ChartLabels(formatter: jsFunction((self, _) {
+    labels: ChartLabels(formatter: jsFunction((self) {
         return '${(getProperty(self, 'value') as num)/1000}k';
     })));
 
@@ -305,7 +315,10 @@ void _renderAreaChart(AreaChart chart) {
         symbol: 'circle',
         radius: 2,
         states: ChartStates(
-          hover: ChartHover(enabled: true)))));
+          hover: ChartHover(enabled: true))),
+      events: EventPlotOptions(legendItemClick: jsFunction((self, _) {
+        print(getProperty(self, 'color'));
+      }))));
 
   chart.model = model;
   chart.update();

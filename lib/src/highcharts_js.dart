@@ -340,8 +340,8 @@ abstract class ChartTooltip {
 @JS()
 abstract class ChartPlotOptions {
 
-  external ChartColumn get column;
-  external set column(ChartColumn v);
+  external ColumnPlotOptions get column;
+  external set column(ColumnPlotOptions v);
 
   external PiePlotOptions get pie;
   external set pie(PiePlotOptions v);
@@ -350,7 +350,7 @@ abstract class ChartPlotOptions {
   external set area(AreaPlotOptions v);
 
   external factory ChartPlotOptions({
-    ChartColumn column,
+    ColumnPlotOptions column,
     PiePlotOptions pie,
     AreaPlotOptions area});
 }
@@ -435,6 +435,9 @@ abstract class PiePlotOptions {
   external bool get allowPointSelect;
   external set allowPointSelect(bool v);
 
+  external bool get showCheckbox;
+  external set showCheckbox(bool v);
+
   external String get size;
   external set size(String v);
 
@@ -447,9 +450,12 @@ abstract class PiePlotOptions {
   external num get endAngle;
   external set endAngle(num v);
 
+  external EventPlotOptions get events;
+  external set events(EventPlotOptions v);
+
   external factory PiePlotOptions({
     String cursor,
-    bool shadow,
+    bool shadow, bool showCheckbox,
     bool showInLegend,
     List<dynamic> center,
     ChartDataLabels dataLabels,
@@ -457,12 +463,16 @@ abstract class PiePlotOptions {
     bool ignoreHiddenPoint,
     String size, ChartStates states,
     num startAngle, num endAngle,
-    String borderColor, num borderWidth});
+    String borderColor, num borderWidth,
+    EventPlotOptions events});
 }
 
 @anonymous
 @JS()
 abstract class AreaPlotOptions {
+
+  external bool get showCheckbox;
+  external set showCheckbox(bool v);
 
   external num get pointStart;
   external set pointStart(num v);
@@ -488,16 +498,22 @@ abstract class AreaPlotOptions {
   external String get lineColor;
   external set lineColor(String v);
 
+  external EventPlotOptions get events;
+  external set events(EventPlotOptions v);
+
   external factory AreaPlotOptions({
-    num pointStart, num pointInterval,
+    num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, pointPlacement,
     ChartMarker marker, String stacking,
-    num lineWidth, String lineColor});
+    num lineWidth, String lineColor, EventPlotOptions events});
 }
 
 @anonymous
 @JS()
-abstract class ChartColumn {
+abstract class ColumnPlotOptions {
+  external bool get showCheckbox;
+  external set showCheckbox(bool v);
+
   external num get pointPadding;
   external set pointPadding(num v);
 
@@ -510,8 +526,49 @@ abstract class ChartColumn {
   external String get stacking;
   external set stacking(String v);
 
-  external factory ChartColumn({num pointPadding, groupPadding, num borderWidth, String stacking});
+  external EventPlotOptions get events;
+  external set events(EventPlotOptions v);
+
+  external factory ColumnPlotOptions({
+    bool showCheckbox,
+    num pointPadding, groupPadding, num borderWidth,
+    String stacking, EventPlotOptions events});
 }
+
+
+@anonymous
+@JS()
+abstract class EventPlotOptions {
+  external Function get afterAnimate;
+  external set afterAnimate(Function v);
+
+  external Function get show;
+  external set show(Function v);
+
+  external Function get hide;
+  external set hide(Function v);
+
+  external Function get click;
+  external set click(Function v);
+
+  external Function get checkboxClick;
+  external set checkboxClick(Function v);
+
+  external Function get legendItemClick;
+  external set legendItemClick(Function v);
+
+  external Function get mouseOver;
+  external set mouseOver(Function v);
+
+  external Function get mouseOut;
+  external set mouseOut(Function v);
+
+  external factory EventPlotOptions({Function afterAnimate,
+    Function show, Function hide, Function click,
+    Function checkboxClick, Function legendItemClick,
+    Function mouseOver, Function mouseOut});
+}
+
 
 @anonymous
 @JS()
