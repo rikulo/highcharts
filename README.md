@@ -1,8 +1,7 @@
 # highcharts
 
-[highcharts](http://rikulo.org) is a wrapper of [Highcharts](https://www.highcharts.com) in Dart.
+highcharts is a wrapper of [Highcharts](https://www.highcharts.com) in Dart.
 
-* [Home](http://rikulo.org)
 * [API Reference](https://pub.dev/documentation/rikulo_highcharts/latest/)
 * [Git Repository](https://github.com/rikulo/highcharts)
 * [Issues](https://github.com/rikulo/highcharts/issues)
