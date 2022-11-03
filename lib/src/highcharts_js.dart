@@ -15,10 +15,15 @@ class Highcharts {
 @JS('Highcharts.chart')
 class HighChart {
 
+  external List<ChartSeries> get series;
+
+  external ChartSeries addSeries (ChartDataSets options, [bool redraw = true, bool animation = true]);
+
   external void redraw();
   external void update(ChartConfiguration options, bool redraw);
   external void reflow();
   external void setSize(num? width, num? height, AnimationOptions? animation);
+  external void destroy();
 
   external factory HighChart(dynamic container, ChartConfiguration options);
 }
@@ -770,4 +775,28 @@ abstract class ChartInnerDataSets {
   external factory ChartInnerDataSets({
     String name, num? y, String? color,
     bool? visible, bool? sliced, bool? selected});
+}
+
+@anonymous
+@JS()
+abstract class ChartSeries {
+  external String get name;
+  external set name(String v);
+
+  external String get type;
+
+  external bool get visible;
+
+  external bool get selected;
+
+  external void setVisible(bool visible, bool redraw);
+
+  external void show();
+  external void hide();
+
+  external void update();
+  external void remove();
+
+  external factory ChartSeries({
+    String name});
 }

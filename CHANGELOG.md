@@ -2,6 +2,7 @@
 
 **2.0.1**
 * Support chart events
+* Support add/remove series
 
 **2.0.0**
 * Migrate to null safety

@@ -41,6 +41,15 @@ void _main() {
           'thebulletin.org</a> &amp; <a href="https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat">armscontrol.org</a>');
   querySelector('#areaChart')?.append(areaChart.element);
   _renderAreaChart(areaChart);
+
+  querySelector('#update-area')?.onClick.listen((event) {
+    final chartSeries = areaChart.chartSeries;
+    if (chartSeries.length > 1)
+      chartSeries[1].remove();
+    else {
+      areaChart.addSeries(areaChart.series[1]);
+    }
+  });
 }
 
 void _renderColumnChart(ColumnChart chart) {
@@ -285,7 +294,7 @@ void _renderAreaChart(AreaChart chart) {
 
   pointStart = 1940;
   for (final value in ussrData) {
-  model.setValue("USSR/Russia", pointStart++, value);
+    model.setValue("USSR/Russia", pointStart++, value);
   }
 
   chart.xAxis = ChartXAxis(
@@ -322,5 +331,4 @@ void _renderAreaChart(AreaChart chart) {
 
   chart.model = model;
   chart.update();
-
 }

@@ -127,6 +127,20 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
   ///Sets accessibility of chart
   void set accessibility(ChartAccessibility? accessibility);
 
+  ///An array of all the chart's series.
+  List<ChartSeries> get chartSeries;
+
+  List<ChartDataSets> get series;
+
+  ///Add a series to the chart after render time. 
+  ///Note that this method should never be used 
+  ///when adding data synchronously at chart render time, 
+  ///as it adds expense to the calculations and rendering. 
+  ///When adding data at the same time as the chart is initialized, 
+  ///add the series as a configuration option instead. With multiple axes, 
+  ///the offset is dynamically adjusted.
+  ChartSeries? addSeries(ChartDataSets options, [bool redraw = true, bool animation = true]);
+
   ///Render chart with chart model
   void render();
 
@@ -142,6 +156,11 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
    * this must be called explicitly.
    */
   void reflow();
+
+  /// Removes the chart and purges memory. 
+  /// This method should be called before writing a new chart into the same container. 
+  /// It is called internally on window unload to prevent leaks.
+  void destroy();
 
   /**
    * Resize the chart to a given width and height.
@@ -179,7 +198,8 @@ abstract class AreaChart<S extends Comparable, C extends Comparable> extends Cha
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
-abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
+abstract class _BaseChartImpl<S extends Comparable, 
+C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   final String type;
   @override
@@ -302,7 +322,8 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
       series: series);
   }
 
-  List<ChartDataSets> get series;
+  @override
+  List<ChartSeries> get chartSeries => _chart?.series ?? [];
 
   @override
   T? get model => _model;
@@ -322,6 +343,8 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
 
     if (_chart == null)
       _initChart();
+    else
+      _chart?.update(_chartConfig, true);
   }
 
   void _initChart() {
@@ -355,6 +378,16 @@ abstract class _BaseChartImpl<S extends Comparable, C extends Comparable, T exte
   @override
   void setSize([num? width, num? height, AnimationOptions? animation]) {
     _chart?.setSize(width, height, animation);
+  }
+
+  @override
+  ChartSeries? addSeries(ChartDataSets options, [bool redraw = true, bool animation = true]) {
+    return _chart?.addSeries(options, redraw, animation);
+  }
+
+  @override
+  void destroy() {
+    _chart?.destroy();
   }
 }
 
