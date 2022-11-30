@@ -261,6 +261,9 @@ abstract class ChartLegend {
   external String get verticalAlign;
   external set verticalAlign(String v);
 
+  external String get layout;
+  external set layout(String v);
+
   external num get x;
   external set x(num v);
 
@@ -288,6 +291,7 @@ abstract class ChartLegend {
   external factory ChartLegend({
     String align,
     String verticalAlign,
+    String layout,
     num x, num y,
     String borderColor,
     num borderWidth,

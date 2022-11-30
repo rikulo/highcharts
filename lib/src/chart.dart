@@ -546,21 +546,23 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
       data[series] = values;
     }
 
-    for (final series in data.keys)
+    for (final series in data.keys) {
+      final marker = ChartMarker(
+          symbol: model.getSeriesStyle(series, SeriesStyle.markerSymbol),
+          fillColor: model.getSeriesStyle(series, SeriesStyle.markerFillColor),
+          lineColor: model.getSeriesStyle(series, SeriesStyle.markerLineColor) ?? '#ffffff', // charts default value
+          lineWidth: model.getSeriesStyle(series, SeriesStyle.markerLineWidth) ?? 0), // charts default value
+        markerEnabled = model.getSeriesStyle(series, SeriesStyle.markerEnabled);
+      if (markerEnabled != null) marker.enabled = markerEnabled; // since null = true in charts
       list.add(ChartDataSets(
         name: series.toString(),
         color: model.getSeriesStyle(series, SeriesStyle.color),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
-        marker: ChartMarker(
-          symbol: model.getSeriesStyle(series, SeriesStyle.markerSymbol),
-          fillColor: model.getSeriesStyle(series, SeriesStyle.markerFillColor),
-          lineColor: model.getSeriesStyle(series, SeriesStyle.markerLineColor) ?? '#ffffff', // charts default value
-          lineWidth: model.getSeriesStyle(series, SeriesStyle.markerLineWidth) ?? 0 // charts default value
-        ),
+        marker: marker,
         lineColor: model.getSeriesStyle(series, SeriesStyle.lineColor),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         data: data[series]));
-
+    }
     return list;
   }
 }

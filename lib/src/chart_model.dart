@@ -6,7 +6,7 @@ library highcharts.src.chart_model;
 enum SeriesStyle { 
   name, color, colorByPoint, borderRadius, fillOpacity,
   size, innerSize, lineColor, dataLabels, sliced, selected,
-  markerLineColor, markerSymbol, markerFillColor, markerLineWidth // marker
+  markerEnabled, markerLineColor, markerSymbol, markerFillColor, markerLineWidth // marker
 }
 
 abstract class ChartModel<S extends Comparable, C extends Comparable> {

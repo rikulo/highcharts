@@ -1,6 +1,8 @@
 # CHANGES
 
 **2.0.2**
+* Add `ChartLegend.layout`
+* Add `SeriesStyle.markerEnabled` in AreaChart
 
 **2.0.1**
 * Support chart events
