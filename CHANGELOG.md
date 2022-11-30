@@ -1,5 +1,7 @@
 # CHANGES
 
+**2.0.2**
+
 **2.0.1**
 * Support chart events
 * Support add/remove series
