@@ -1,5 +1,7 @@
 # CHANGES
 
+**2.0.3**
+
 **2.0.2**
 * Add `ChartLegend.layout`
 * Add `SeriesStyle.markerEnabled` in AreaChart
