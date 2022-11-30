@@ -180,6 +180,9 @@ abstract class ChartXAxis {
   external String get tickColor;
   external set tickColor(String v);
 
+  external Function get tickPositioner;
+  external set tickPositioner(Function v);
+
   external String get tickmarkPlacement;
   external set tickmarkPlacement(String v);
 
@@ -194,7 +197,7 @@ abstract class ChartXAxis {
     ChartLabels labels,
     bool allowDecimals, dynamic crosshair, num tickLength,
     String lineColor, num lineWidth, num tickWidth,
-    String tickColor, String tickmarkPlacement, String type,
+    String tickColor, Function tickPositioner, String tickmarkPlacement, String type,
     ChartAccessibility accessibility});
 }
 
@@ -235,6 +238,9 @@ abstract class ChartYAxis {
   external num get tickInterval;
   external set tickInterval(num v);
 
+  external Function get tickPositioner;
+  external set tickPositioner(Function v);
+
   external bool get showFirstLabel;
   external set showFirstLabel(bool v);
 
@@ -248,7 +254,7 @@ abstract class ChartYAxis {
     ChartTitle title, num min,
     ChartLabels labels,
     String gridLineColor, num tickAmount,
-    num tickInterval, bool showFirstLabel,
+    num tickInterval, Function tickPositioner, bool showFirstLabel,
     String type, ChartAccessibility accessibility});
 }
 

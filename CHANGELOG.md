@@ -1,6 +1,7 @@
 # CHANGES
 
 **2.0.3**
+* Add `ChartXAxis.tickPositioner` and `ChartYAxis.tickPositioner`
 
 **2.0.2**
 * Add `ChartLegend.layout`
