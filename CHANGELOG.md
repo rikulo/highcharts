@@ -1,5 +1,8 @@
 # CHANGES
 
+**2.0.5**
+
+
 **2.0.4**
 * Add margin, padding, itemMarginTop, and itemMarginBottom in `ChartLegend`
 
