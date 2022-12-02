@@ -1,7 +1,7 @@
 # CHANGES
 
 **2.0.4**
-
+* Add margin, padding, itemMarginTop, and itemMarginBottom in `ChartLegend`
 
 **2.0.3**
 * Add `ChartXAxis.tickPositioner` and `ChartYAxis.tickPositioner`

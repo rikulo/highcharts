@@ -276,6 +276,18 @@ abstract class ChartLegend {
   external num get y;
   external set y(num v);
 
+  external num get margin;
+  external set margin(num v);
+
+  external num get padding;
+  external set padding(num v);
+
+  external num get itemMarginTop;
+  external set itemMarginTop(num v);
+
+  external num get itemMarginBottom;
+  external set itemMarginBottom(num v);
+
   external String get borderColor;
   external set borderColor(String v);
 
@@ -298,7 +310,7 @@ abstract class ChartLegend {
     String align,
     String verticalAlign,
     String layout,
-    num x, num y,
+    num x, num y, num margin, num padding, num itemMarginTop, num itemMarginBottom,
     String borderColor,
     num borderWidth,
     bool floating,
