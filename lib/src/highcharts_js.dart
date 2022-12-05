@@ -276,6 +276,9 @@ abstract class ChartLegend {
   external num get y;
   external set y(num v);
 
+  external num get width;
+  external set width(num v);
+
   external num get margin;
   external set margin(num v);
 
@@ -319,7 +322,7 @@ abstract class ChartLegend {
     String align,
     String verticalAlign,
     String layout,
-    num x, num y, num margin, num padding, num itemMarginTop, num itemMarginBottom,
+    num x, num y, num width, num margin, num padding, num itemMarginTop, num itemMarginBottom,
     num symbolPadding, num symbolHeight, num symbolWidth,
     String borderColor,
     num borderWidth,
@@ -754,6 +757,9 @@ abstract class ChartDataSets {
   external bool get colorByPoint;
   external set colorByPoint(bool v);
 
+  external bool get showInLegend;
+  external set showInLegend(bool v);
+
   external ChartDataLabels get dataLabels;
   external set dataLabels(ChartDataLabels v);
 
@@ -775,7 +781,7 @@ abstract class ChartDataSets {
   external factory ChartDataSets({
     String? name, String? color, num? y,
     String? size, String? innerSize,
-    bool? visible, bool? colorByPoint,
+    bool? visible, bool? colorByPoint, bool? showInLegend,
     num? startAngle, num? endAngle,
     num? borderRadius, num? borderWidth, String? stack,
     ChartDataLabels? dataLabels,

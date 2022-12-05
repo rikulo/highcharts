@@ -1,7 +1,8 @@
 # CHANGES
 
 **2.0.6**
-
+* Add `SeriesStyle.showInLegend`
+* Add `ChartLegend.width`
 
 **2.0.5**
 * Add symbolPadding, symbolHeight and symbolWidth in `ChartLegend`

@@ -422,6 +422,7 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
         color: model.getSeriesStyle(series, SeriesStyle.color),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
+        showInLegend: model.getSeriesStyle(series, SeriesStyle.showInLegend),
         data: data[series]));
 
     return list;
@@ -507,13 +508,14 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
 
       final size = model.getSeriesStyle(key, SeriesStyle.size),
         innerSize =  model.getSeriesStyle(key, SeriesStyle.innerSize),
-        dataLabels = model.getSeriesStyle(key, SeriesStyle.dataLabels);
+        dataLabels = model.getSeriesStyle(key, SeriesStyle.dataLabels),
+        showInLegend = model.getSeriesStyle(key, SeriesStyle.showInLegend);
 
       //Cannot set a null dataLabels to ChartDataSets(dataLabels: dataLabels)
       seriesDatas.add(dataLabels != null ?
-        ChartDataSets(size: size, innerSize: innerSize,
+        ChartDataSets(size: size, innerSize: innerSize, showInLegend: showInLegend,
           dataLabels: dataLabels, data: seriesData):
-        ChartDataSets(size: size, innerSize: innerSize,
+        ChartDataSets(size: size, innerSize: innerSize, showInLegend: showInLegend,
           data: seriesData));
     }
 
@@ -561,6 +563,7 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
         marker: marker,
         lineColor: model.getSeriesStyle(series, SeriesStyle.lineColor),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
+        showInLegend: model.getSeriesStyle(series, SeriesStyle.showInLegend),
         data: data[series]));
     }
     return list;
