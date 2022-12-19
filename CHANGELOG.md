@@ -1,5 +1,8 @@
 # CHANGES
 
+**2.0.7**
+* Add `SeriesStyle.visible`
+
 **2.0.6**
 * Add `SeriesStyle.showInLegend`
 * Add `ChartLegend.width`

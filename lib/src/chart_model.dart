@@ -7,7 +7,7 @@ enum SeriesStyle {
   name, color, colorByPoint, borderRadius, fillOpacity,
   size, innerSize, lineColor, dataLabels, sliced, selected,
   markerEnabled, markerLineColor, markerSymbol, markerFillColor, markerLineWidth, // marker
-  showInLegend,
+  showInLegend, visible
 }
 
 abstract class ChartModel<S extends Comparable, C extends Comparable> {

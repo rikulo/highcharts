@@ -132,6 +132,10 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
 
   List<ChartDataSets> get series;
 
+  set isDirtyLegend(bool v);
+
+  set isDirtyBox(bool v);
+
   ///Add a series to the chart after render time. 
   ///Note that this method should never be used 
   ///when adding data synchronously at chart render time, 
@@ -146,6 +150,8 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
 
   ///update chart's data and redraw
   void update();
+
+  void redraw();
 
   /**
    * Reflows the chart to its container.
@@ -366,6 +372,16 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   }
 
   @override
+  set isDirtyLegend(bool v) {
+    _chart?.isDirtyLegend = v;
+  }
+  
+  @override
+  set isDirtyBox(bool v) {
+    _chart?.isDirtyBox = v;
+  }
+
+  @override
   void update() {
     _chart?.update(_chartConfig, true);
   }
@@ -373,6 +389,11 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   @override
   void reflow() {
     _chart?.reflow();
+  }
+
+  @override
+  void redraw() {
+    _chart?.redraw();
   }
 
   @override
@@ -423,6 +444,7 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
         showInLegend: model.getSeriesStyle(series, SeriesStyle.showInLegend),
+        visible: model.getSeriesStyle(series, SeriesStyle.visible) ?? true,
         data: data[series]));
 
     return list;
@@ -454,11 +476,13 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
         color: model.getValueColor(category),
         sliced: model.getValueStyle(category, SeriesStyle.sliced),
         selected: model.getValueStyle(category, SeriesStyle.selected),
+        visible: model.getValueStyle(category, SeriesStyle.visible),
       ));
     }
 
     final name = model.getSingleSeriesStyle(SeriesStyle.name),
-        colorByPoint = model.getSingleSeriesStyle(SeriesStyle.colorByPoint) ?? true,
+      colorByPoint = model.getSingleSeriesStyle(SeriesStyle.colorByPoint) ?? true,
+      visible = model.getSingleSeriesStyle(SeriesStyle.visible) ?? true,
       innerSize = model.getSingleSeriesStyle(SeriesStyle.innerSize),
       dataLabels = model.getSingleSeriesStyle(SeriesStyle.dataLabels);
 
@@ -468,10 +492,12 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
         name: name, colorByPoint: colorByPoint,
         innerSize: innerSize,
         dataLabels: dataLabels,
+        visible: visible,
         data: seriesData):
       ChartDataSets(
         name: name, colorByPoint: colorByPoint,
         innerSize: innerSize,
+        visible: visible,
         data: seriesData)];
   }
 }
@@ -509,13 +535,16 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
       final size = model.getSeriesStyle(key, SeriesStyle.size),
         innerSize =  model.getSeriesStyle(key, SeriesStyle.innerSize),
         dataLabels = model.getSeriesStyle(key, SeriesStyle.dataLabels),
+        visible = model.getSeriesStyle(key, SeriesStyle.visible) ?? true,
         showInLegend = model.getSeriesStyle(key, SeriesStyle.showInLegend);
 
       //Cannot set a null dataLabels to ChartDataSets(dataLabels: dataLabels)
       seriesDatas.add(dataLabels != null ?
-        ChartDataSets(size: size, innerSize: innerSize, showInLegend: showInLegend,
+        ChartDataSets(size: size, innerSize: innerSize, 
+          showInLegend: showInLegend, visible: visible,
           dataLabels: dataLabels, data: seriesData):
-        ChartDataSets(size: size, innerSize: innerSize, showInLegend: showInLegend,
+        ChartDataSets(size: size, innerSize: innerSize, 
+          showInLegend: showInLegend, visible: visible,
           data: seriesData));
     }
 
@@ -564,6 +593,7 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
         lineColor: model.getSeriesStyle(series, SeriesStyle.lineColor),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         showInLegend: model.getSeriesStyle(series, SeriesStyle.showInLegend),
+        visible: model.getSeriesStyle(series, SeriesStyle.visible) ?? true,
         data: data[series]));
     }
     return list;

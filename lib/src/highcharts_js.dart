@@ -26,6 +26,9 @@ class HighChart {
   external void destroy();
 
   external factory HighChart(dynamic container, ChartConfiguration options);
+
+  external set isDirtyLegend(bool v);
+  external set isDirtyBox(bool v);
 }
 
 @anonymous
