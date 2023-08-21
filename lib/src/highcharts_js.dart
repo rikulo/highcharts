@@ -830,6 +830,10 @@ abstract class ChartSeries {
 
   external bool get selected;
 
+  external List<Point> get data;
+
+  external List<Point> get points;
+
   external void setVisible(bool visible, bool redraw);
 
   external void show();
@@ -840,4 +844,25 @@ abstract class ChartSeries {
 
   external factory ChartSeries({
     String name});
+}
+
+@anonymous
+@JS()
+abstract class Point {
+  external String get category;
+  external int get index;
+  external String get name;
+  external int get plotX;
+  external int get plotY;
+  external bool get selected;
+  external List<ChartSeries> series;
+  external bool get visible;
+  external int get x;
+  external int get y;
+
+  external void update(num yValue, bool? redraw, bool? animation);
+  external void remove();
+  external void select(bool selected, bool accumulate);
+  external void setState(String state, bool move);
+  external void tooltipFormatter(String context);
 }
