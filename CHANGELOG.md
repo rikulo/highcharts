@@ -2,6 +2,7 @@
 
 **2.0.7**
 * Add `SeriesStyle.visible`
+* Add `Point` class
 
 **2.0.6**
 * Add `SeriesStyle.showInLegend`
