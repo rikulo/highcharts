@@ -174,6 +174,12 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
    * To set the height only, pass undefined for the width.
    */
   void setSize([num width, num height, AnimationOptions animation]);
+
+  //change values of donutchart and redraw it with animation.
+  void updatePoint(int seriesIndex, int pointIndex, num value, [bool redraw = true, bool animation = true]);
+
+  //check if index in the list
+  T? at<T>(List<T>? list, int index);
 }
 
 abstract class ColumnChart<S extends Comparable, C extends Comparable> implements Chart<S, C, CategoryModel<S, C>> {
@@ -409,6 +415,17 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   @override
   void destroy() {
     _chart?.destroy();
+  }
+
+  @override
+  void updatePoint(int seriesIndex, int pointIndex, num value, [bool redraw = true, bool animation = true]){
+      at(at(_chart?.series, seriesIndex)?.points, pointIndex)?.update(value, redraw, animation);
+  }
+
+  @override
+  T? at<T>(List<T>? list, int index){
+    if (list != null && list.length > index && index >= 0) return list[index];
+    return null;
   }
 }
 
