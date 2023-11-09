@@ -1,5 +1,8 @@
 # CHANGES
 
+**3.0.0**
+* Dart 3 required
+
 **2.0.7**
 * Add `SeriesStyle.visible`
 * Add `Point` class

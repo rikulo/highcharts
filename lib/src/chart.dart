@@ -183,28 +183,28 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
 }
 
 abstract class ColumnChart<S extends Comparable, C extends Comparable> implements Chart<S, C, CategoryModel<S, C>> {
-  factory ColumnChart({String titleText: '', String subtitleText: '',
+  factory ColumnChart({String titleText = '', String subtitleText = '',
     dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
     => _ColumnChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
         width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
 abstract class PieChart<S extends Comparable, C extends Comparable> extends Chart<S, C, SingleValueCategoryModel<S, C>> {
-  factory PieChart({String titleText: '', String subtitleText: '',
+  factory PieChart({String titleText = '', String subtitleText = '',
   dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
   => _PieChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
 abstract class DonutChart<S extends Comparable, C extends Comparable> extends Chart<S, C, DonutModel<S, C>> {
-  factory DonutChart({String titleText: '', String subtitleText: '',
+  factory DonutChart({String titleText = '', String subtitleText = '',
   dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
   => _DonutChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
 abstract class AreaChart<S extends Comparable, C extends Comparable> extends Chart<S, C, CategoryModel<S, C>> {
-  factory AreaChart({String titleText: '', String subtitleText: '',
+  factory AreaChart({String titleText = '', String subtitleText = '',
   dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
   => _AreaChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
@@ -217,7 +217,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   @override
   final element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
 
-  _BaseChartImpl(this.type, {String titleText: '', String subtitleText: '',
+  _BaseChartImpl(this.type, {String titleText = '', String subtitleText = '',
       dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
     this._titleText = titleText,
     this._subtitleText = subtitleText,
@@ -432,7 +432,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 class _ColumnChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements ColumnChart<S, C> {
 
-  _ColumnChartImpl({String titleText: '', String subtitleText: '',
+  _ColumnChartImpl({String titleText = '', String subtitleText = '',
     dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.column, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
@@ -472,7 +472,7 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
 class _PieChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, SingleValueCategoryModel<S, C>> implements PieChart<S, C> {
 
-  _PieChartImpl({String titleText: '', String subtitleText: '',
+  _PieChartImpl({String titleText = '', String subtitleText = '',
     dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis) {
@@ -491,9 +491,9 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
         name: category.toString(),
         y: model.getValue(category),
         color: model.getValueColor(category),
-        sliced: model.getValueStyle(category, SeriesStyle.sliced),
-        selected: model.getValueStyle(category, SeriesStyle.selected),
-        visible: model.getValueStyle(category, SeriesStyle.visible),
+        sliced: model.getValueStyle(category, SeriesStyle.sliced) ?? false,
+        selected: model.getValueStyle(category, SeriesStyle.selected) ?? false,
+        visible: model.getValueStyle(category, SeriesStyle.visible) ?? true,
       ));
     }
 
@@ -522,7 +522,7 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
 class _DonutChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, DonutModel<S, C>> implements DonutChart<S, C> {
 
-  _DonutChartImpl({String titleText: '', String subtitleText: '',
+  _DonutChartImpl({String titleText = '', String subtitleText = '',
     dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);
@@ -572,7 +572,7 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
 class _AreaChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements AreaChart<S, C> {
 
-  _AreaChartImpl({String titleText: '', String subtitleText: '',
+  _AreaChartImpl({String titleText = '', String subtitleText = '',
     dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
   super(ChartType.area, titleText: titleText, subtitleText: subtitleText,
     width: width, height: height, xAxis: xAxis, yAxis: yAxis);

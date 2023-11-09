@@ -163,7 +163,7 @@ void _renderPieChart(PieChart chart) {
         showInLegend: true,
         showCheckbox: true,
         events: EventPlotOptions(checkboxClick: jsFunction((self, event) {
-          print('${getProperty(self, 'name')} ${getProperty(event, 'checked')}');
+          print('${getProperty(self, 'name')} ${getProperty(getProperty(event, 'item'), 'name')} ${getProperty(event, 'checked')}');
         }))));
 
   chart.model = model;
