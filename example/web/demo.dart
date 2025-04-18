@@ -1,17 +1,19 @@
-import 'dart:html';
+import 'package:web/web.dart';
 import 'dart:async';
 
-import "dart:js";
-import 'dart:js_util';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 
 import 'package:rikulo_highcharts/rikulo_highcharts.dart';
 
 void main() {
-  if  (context['Highcharts'] == null) {
-    Timer(const Duration(milliseconds: 50), main);
-    return;
-  }
+  // print(globalContext['Highcharts']);
+  // print(window.hasProperty('Highcharts'.toJS));
+  // if  (context['Highcharts'] == null) {
+  //   Timer(const Duration(milliseconds: 50), main);
+  //   return;
+  // }
 
   _main();
 }
@@ -20,18 +22,18 @@ void _main() {
   final columnChart = ColumnChart(
       titleText: 'Monthly Average Rainfall',
       subtitleText: 'Source: WorldClimate.com');
-  querySelector('#columnChart')?.append(columnChart.element);
+  document.querySelector('#columnChart')?.append(columnChart.element);
   _renderColumnChart(columnChart);
 
   final pieChart = PieChart(
       titleText: 'Browser market shares in January, 2018');
-  querySelector('#pieChart')?.append(pieChart.element);
+  document.querySelector('#pieChart')?.append(pieChart.element);
   _renderPieChart(pieChart);
 
   final donutChart = DonutChart(
       titleText: 'Browser market share, January, 2018',
       subtitleText: 'Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>');
-  querySelector('#donutChart')?.append(donutChart.element);
+  document.querySelector('#donutChart')?.append(donutChart.element);
   _renderDonutChart(donutChart);
 
 
@@ -39,10 +41,10 @@ void _main() {
       titleText: 'US and USSR nuclear stockpiles',
       subtitleText: 'Sources: <a href="https://thebulletin.org/2006/july/global-nuclear-stockpiles-1945-2006">'
           'thebulletin.org</a> &amp; <a href="https://www.armscontrol.org/factsheets/Nuclearweaponswhohaswhat">armscontrol.org</a>');
-  querySelector('#areaChart')?.append(areaChart.element);
+  document.querySelector('#areaChart')?.append(areaChart.element);
   _renderAreaChart(areaChart);
 
-  querySelector('#update-area')?.onClick.listen((event) {
+  document.querySelector('#update-area')?.onClick.listen((event) {
     final chartSeries = areaChart.chartSeries;
     if (chartSeries.length > 1)
       chartSeries[1].remove();
@@ -104,7 +106,7 @@ void _renderColumnChart(ColumnChart chart) {
   model.setValue("Berlin", "Nov", 46.8);
   model.setValue("Berlin", "Dec", 51.1);
 
-  chart.xAxis = ChartXAxis(crosshair: true);
+  chart.xAxis = ChartXAxis(crosshair: true.toJS);
   chart.yAxis = ChartYAxis(
       min: 0,
       title: ChartTitle(
@@ -115,9 +117,9 @@ void _renderColumnChart(ColumnChart chart) {
       column: ColumnPlotOptions(
         pointPadding: 0.2,
         borderWidth: 0,
-        events: EventPlotOptions(legendItemClick: jsFunction((self, _) {
-          print(getProperty(self, 'color'));
-        }))));
+        events: EventPlotOptions(legendItemClick: (JSObject self, _) {
+          print(self.getProperty('color'.toJS));
+        }.toJSCaptureThis)));
 
   chart.tooltip = ChartTooltip(
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -162,9 +164,11 @@ void _renderPieChart(PieChart chart) {
         dataLabels: ChartDataLabels(enabled: false),
         showInLegend: true,
         showCheckbox: true,
-        events: EventPlotOptions(checkboxClick: jsFunction((self, event) {
-          print('${getProperty(self, 'name')} ${getProperty(getProperty(event, 'item'), 'name')} ${getProperty(event, 'checked')}');
-        }))));
+        events: EventPlotOptions(checkboxClick: (JSObject self, JSObject event) {
+          print('${self.getProperty('name'.toJS)} '
+            '${(event.getProperty('item'.toJS) as JSObject).getProperty('name'.toJS)} '
+            '${event.getProperty('checked'.toJS)}');
+        }.toJSCaptureThis)));
 
   chart.model = model;
   chart.update();
@@ -216,22 +220,22 @@ void _renderDonutChart(DonutChart chart) {
     final key = browserEntry.key;
 
     innerBrowserModel.setValue(key, browserEntry.value);
-    innerBrowserModel.setValueColor(key, colors[i]);
+    innerBrowserModel.setValueColor(key, colors[i].toDart);
 
     for (final versionEntry in versions[key]!.entries) {
       final key = versionEntry.key;
       innerVersionModel.setValue(key, versionEntry.value);
-      innerVersionModel.setValueColor(key, colors[i]);
+      innerVersionModel.setValueColor(key, colors[i].toDart);
     }
     i++;
   }
 
   chart.plotOptions = ChartPlotOptions(
       pie: PiePlotOptions(shadow: false,
-          center: ['50%', '50%'],
-          events: EventPlotOptions(click: jsFunction((self, _) {
-            print(getProperty(self, 'name'));
-          }))));
+          center: ['50%', '50%'].jsify() as JSArray<JSAny>,
+          events: EventPlotOptions(click: (JSObject self, _) {
+            print(self.getProperty('name'.toJS));
+          }.toJSCaptureThis)));
 
   chart.tooltip = ChartTooltip(valueSuffix: '%');
 
@@ -240,11 +244,11 @@ void _renderDonutChart(DonutChart chart) {
 
   model.setSeriesStyle("Browsers", SeriesStyle.size, '60%');
   model.setSeriesStyle("Browsers", SeriesStyle.dataLabels, ChartDataLabels(
-      formatter: jsFunction((self, _) {
-        final y = getProperty(self, 'y');
-        return y is num && y > 5 ?
-          getProperty(getProperty(self, 'point'), 'name'): null;
-      }),
+      formatter: (JSObject self, _) {
+        final y = self.getProperty('y'.toJS);
+        return y is JSNumber && y.toDartDouble > 5 ?
+          (self.getProperty('point'.toJS) as JSObject).getProperty('name'.toJS): null;
+      }.toJSCaptureThis,
     color: '#ffffff',
     distance: -30
   ));
@@ -252,12 +256,12 @@ void _renderDonutChart(DonutChart chart) {
   model.setSeriesStyle("Versions", SeriesStyle.size, '80%');
   model.setSeriesStyle("Versions", SeriesStyle.innerSize, '60%');
   model.setSeriesStyle("Versions", SeriesStyle.dataLabels, ChartDataLabels(
-      formatter: jsFunction((self, _) {
-        final y = getProperty(self, 'y');
+      formatter: (JSObject self, _) {
+        final y = self.getProperty('y'.toJS);
         // display only if larger than 1
-        return y is num && y > 1 ?
-          '<b>${getProperty(getProperty(self, 'point'), 'name')}</b> $y%': null;
-      }),
+        return y is JSNumber && y.toDartDouble > 1 ?
+          '<b>${(self.getProperty('point'.toJS) as JSObject).getProperty('name'.toJS)}</b> $y%': null;
+      }.toJSCaptureThis,
   ));
 
   chart.model = model;
@@ -299,18 +303,18 @@ void _renderAreaChart(AreaChart chart) {
 
   chart.xAxis = ChartXAxis(
     allowDecimals: false,
-    labels: ChartLabels(formatter: jsFunction((self) {
-      return getProperty(self, 'value');// clean, unformatted number for year
-    })),
+    labels: ChartLabels(formatter: (JSObject self) {
+      return self.getProperty('value'.toJS);// clean, unformatted number for year
+    }.toJSCaptureThis),
     accessibility: ChartAccessibility(
       rangeDescription: 'Range: 1940 to 2017.'));
 
   chart.yAxis = ChartYAxis(
     title: ChartTitle(
       text: 'Nuclear weapon states'),
-    labels: ChartLabels(formatter: jsFunction((self) {
-        return '${(getProperty(self, 'value') as num)/1000}k';
-    })));
+    labels: ChartLabels(formatter: (JSObject self) {
+        return '${(self.getProperty('value'.toJS) as JSNumber).toDartDouble/1000}k';
+    }.toJSCaptureThis));
 
 
   chart.tooltip = ChartTooltip(
@@ -325,9 +329,9 @@ void _renderAreaChart(AreaChart chart) {
         radius: 2,
         states: ChartStates(
           hover: ChartHover(enabled: true))),
-      events: EventPlotOptions(legendItemClick: jsFunction((self, _) {
-        print(getProperty(self, 'color'));
-      }))));
+      events: EventPlotOptions(legendItemClick: (JSObject self, _) {
+        print(self.getProperty('color'.toJS));
+      }.toJSCaptureThis)));
 
   chart.model = model;
   chart.update();

@@ -4,20 +4,19 @@
 @JS()
 library highcharts.src.highcharts_js;
 
-import "package:js/js.dart";
-
+import 'dart:js_interop';
 
 @JS('Highcharts')
-class Highcharts {
+extension type Highcharts._(JSObject _) implements JSObject {
   external static ChartOptionsStatic getOptions();
 }
 
 @JS('Highcharts.chart')
-class HighChart {
+extension type HighChart._(JSObject _) implements JSObject {
 
-  external List<ChartSeries> get series;
+  external JSArray<ChartSeries> get series;
 
-  external ChartSeries addSeries (ChartDataSets options, [bool redraw = true, bool animation = true]);
+  external ChartSeries addSeries (ChartDataSets options, [bool redraw, bool animation]);
 
   external void redraw();
   external void update(ChartConfiguration options, bool redraw);
@@ -25,15 +24,13 @@ class HighChart {
   external void setSize(num? width, num? height, AnimationOptions? animation);
   external void destroy();
 
-  external factory HighChart(dynamic container, ChartConfiguration options);
+  external factory HighChart(JSAny container, ChartConfiguration options);
 
   external set isDirtyLegend(bool v);
   external set isDirtyBox(bool v);
 }
 
-@anonymous
-@JS()
-abstract class ChartConfiguration {
+extension type ChartConfiguration._(JSObject _) implements JSObject {
 
   external ChartOptions get chart;
   external set chart(ChartOptions v);
@@ -67,8 +64,8 @@ abstract class ChartConfiguration {
   external ChartAccessibility get accessibility;
   external set accessibility(ChartAccessibility v);
 
-  external List<ChartDataSets> get series;
-  external set series(List<ChartDataSets> v);
+  external JSArray<ChartDataSets> get series;
+  external set series(JSArray<ChartDataSets> v);
 
   external factory ChartConfiguration({
     ChartOptions chart,
@@ -80,30 +77,26 @@ abstract class ChartConfiguration {
     ChartTooltip tooltip,
     ChartPlotOptions plotOptions,
     ChartAccessibility accessibility,
-    List<ChartDataSets> series});
+    JSArray<ChartDataSets> series});
 }
 
-@anonymous
-@JS()
-class ChartOptionsStatic {
-  external List<String> get colors;
-  external List<String> get symbols;
+extension type ChartOptionsStatic._(JSObject _) implements JSObject {
+  external JSArray<JSString> get colors;
+  external JSArray<JSString> get symbols;
 }
 
-@anonymous
-@JS()
-abstract class ChartOptions {
+extension type ChartOptions._(JSObject _) implements JSObject {
   external String get type;
   external set type(String v);
 
-  external dynamic get width;
-  external set width(dynamic v);
+  external JSAny get width;
+  external set width(JSAny v);
 
-  external dynamic get height;
-  external set height(dynamic v);
+  external JSAny get height;
+  external set height(JSAny v);
 
-  external List<num> get margin;
-  external set margin(List<num> v);
+  external JSArray<JSNumber> get margin;
+  external set margin(JSArray<JSNumber> v);
 
   external num get marginTop;
   external set marginTop(num v);
@@ -115,49 +108,43 @@ abstract class ChartOptions {
   external set zoomType(String v);
 
   external factory ChartOptions({String type,
-    dynamic width, dynamic height, List<num> margin, num marginTop, String zoomKey, String zoomType});
+    JSAny? width, JSAny? height, JSArray<JSNumber> margin, num marginTop, String zoomKey, String zoomType});
 }
 
-@anonymous
-@JS()
-abstract class AnimationOptions {
+extension type AnimationOptions._(JSObject _) implements JSObject {
   external num get duration;
   external set duration(num v);
 
   external String get easing;
   external set easing(String v);
 
-  external Function get complete;
-  external set complete(Function v);
+  external JSFunction get complete;
+  external set complete(JSFunction v);
 
-  external Function get step;
-  external set step(Function v);
+  external JSFunction get step;
+  external set step(JSFunction v);
 
   external factory AnimationOptions({
     num duration,
     String easing,
-    Function complete,
-    Function step});
+    JSFunction complete,
+    JSFunction step});
 
 }
 
-@anonymous
-@JS()
-abstract class ChartTitle {
+extension type ChartTitle._(JSObject _) implements JSObject {
   external String get text;
   external set text(String v);
 
   external factory ChartTitle({String text});
 }
 
-@anonymous
-@JS()
-abstract class ChartXAxis {
-  external List<dynamic> get categories;
-  external set categories(List<dynamic> v);
+extension type ChartXAxis._(JSObject _) implements JSObject {
+  external JSArray<JSAny> get categories;
+  external set categories(JSArray<JSAny> v);
 
-  external dynamic get crosshair;
-  external set crosshair(dynamic v);
+  external JSAny get crosshair;
+  external set crosshair(JSAny v);
 
   external bool get allowDecimals;
   external set allowDecimals(bool v);
@@ -183,8 +170,8 @@ abstract class ChartXAxis {
   external String get tickColor;
   external set tickColor(String v);
 
-  external Function get tickPositioner;
-  external set tickPositioner(Function v);
+  external JSFunction get tickPositioner;
+  external set tickPositioner(JSFunction v);
 
   external String get tickmarkPlacement;
   external set tickmarkPlacement(String v);
@@ -196,17 +183,15 @@ abstract class ChartXAxis {
   external set accessibility(ChartAccessibility v);
 
   external factory ChartXAxis({
-    List<dynamic> categories,
+    JSArray<JSAny> categories,
     ChartLabels labels,
-    bool allowDecimals, dynamic crosshair, num tickLength,
+    bool allowDecimals, JSAny crosshair, num tickLength,
     String lineColor, num lineWidth, num tickWidth,
-    String tickColor, Function tickPositioner, String tickmarkPlacement, String type,
+    String tickColor, JSFunction tickPositioner, String tickmarkPlacement, String type,
     ChartAccessibility accessibility});
 }
 
-@anonymous
-@JS()
-abstract class ChartCrosshair {
+extension type ChartCrosshair._(JSObject _) implements JSObject {
   external num get width;
   external set width(num v);
 
@@ -220,9 +205,7 @@ abstract class ChartCrosshair {
     num width, String color, String dashStyle});
 }
 
-@anonymous
-@JS()
-abstract class ChartYAxis {
+extension type ChartYAxis._(JSObject _) implements JSObject {
   external ChartTitle get title;
   external set title(ChartTitle v);
 
@@ -241,8 +224,8 @@ abstract class ChartYAxis {
   external num get tickInterval;
   external set tickInterval(num v);
 
-  external Function get tickPositioner;
-  external set tickPositioner(Function v);
+  external JSFunction get tickPositioner;
+  external set tickPositioner(JSFunction v);
 
   external bool get showFirstLabel;
   external set showFirstLabel(bool v);
@@ -257,13 +240,11 @@ abstract class ChartYAxis {
     ChartTitle title, num min,
     ChartLabels labels,
     String gridLineColor, num tickAmount,
-    num tickInterval, Function tickPositioner, bool showFirstLabel,
+    num tickInterval, JSFunction tickPositioner, bool showFirstLabel,
     String type, ChartAccessibility accessibility});
 }
 
-@anonymous
-@JS()
-abstract class ChartLegend {
+extension type ChartLegend._(JSObject _) implements JSObject {
   external String get align;
   external set align(String v);
 
@@ -318,8 +299,9 @@ abstract class ChartLegend {
   external bool get enabled;
   external set enabled(bool v);
 
-  external Map<String, String> get itemStyle;
-  external set itemStyle(Map<String, String> v);
+  // external Map<String, String> get itemStyle;
+  external JSObject get itemStyle;
+  external set itemStyle(JSObject v);
 
   external factory ChartLegend({
     String align,
@@ -332,21 +314,17 @@ abstract class ChartLegend {
     bool floating,
     bool shadow,
     bool enabled,
-    Map<String, String> itemStyle});
+    JSObject itemStyle});
 }
 
-@anonymous
-@JS()
-abstract class ChartCredits {
+extension type ChartCredits._(JSObject _) implements JSObject {
   external bool get enabled;
   external set enabled(bool v);
 
   external factory ChartCredits({bool enabled});
 }
 
-@anonymous
-@JS()
-abstract class ChartTooltip {
+extension type ChartTooltip._(JSObject _) implements JSObject {
 
   external String get valueSuffix;
   external set valueSuffix(String v);
@@ -366,8 +344,8 @@ abstract class ChartTooltip {
   external bool get useHTML;
   external set useHTML(bool v);
 
-  external Function get formatter;
-  external set formatter(Function v);
+  external JSFunction get formatter;
+  external set formatter(JSFunction v);
 
   external factory ChartTooltip({
     String valueSuffix,
@@ -376,12 +354,10 @@ abstract class ChartTooltip {
     String footerFormat,
     bool shared,
     bool useHTML,
-    Function formatter});
+    JSFunction formatter});
 }
 
-@anonymous
-@JS()
-abstract class ChartPlotOptions {
+extension type ChartPlotOptions._(JSObject _) implements JSObject {
 
   external ColumnPlotOptions get column;
   external set column(ColumnPlotOptions v);
@@ -398,11 +374,8 @@ abstract class ChartPlotOptions {
     AreaPlotOptions area});
 }
 
-@anonymous
-@JS()
-abstract class ChartAccessibility {
-
-
+extension type ChartAccessibility._(JSObject _) implements JSObject {
+  
   external String get description;
   external set description(String v);
 
@@ -421,18 +394,16 @@ abstract class ChartAccessibility {
     ChartAccessibilityPoint? point});
 }
 
-@anonymous
-@JS()
-abstract class ChartAccessibilityPoint {
+extension type ChartAccessibilityPoint._(JSObject _) implements JSObject {
 
   external String get dateFormat;
   external set dateFormat(String v);
 
-  external Function get dateFormatter;
-  external set dateFormatter(Function v);
+  external JSFunction get dateFormatter;
+  external set dateFormatter(JSFunction v);
 
-  external Function get descriptionFormatter;
-  external set descriptionFormatter(Function v);
+  external JSFunction get descriptionFormatter;
+  external set descriptionFormatter(JSFunction v);
 
   external num get valueDecimals;
   external set valueDecimals(num v);
@@ -448,14 +419,12 @@ abstract class ChartAccessibilityPoint {
 
 
   external factory ChartAccessibilityPoint({
-    String? dateFormat, Function? dateFormatter, Function? descriptionFormatter,
+    String? dateFormat, JSFunction? dateFormatter, JSFunction? descriptionFormatter,
     num? valueDecimals, String? valueDescriptionFormat,
     String? valuePrefix, String? valueSuffix});
 }
 
-@anonymous
-@JS()
-abstract class PiePlotOptions {
+extension type PiePlotOptions._(JSObject _) implements JSObject {
 
   external String get cursor;
   external set cursor(String v);
@@ -466,8 +435,8 @@ abstract class PiePlotOptions {
   external bool get showInLegend;
   external set showInLegend(bool v);
 
-  external List<dynamic> get center;
-  external set center(List<dynamic> v);
+  external JSArray<JSAny> get center;
+  external set center(JSArray<JSAny> v);
 
   external ChartDataLabels get dataLabels;
   external set dataLabels(ChartDataLabels v);
@@ -500,7 +469,7 @@ abstract class PiePlotOptions {
     String cursor,
     bool shadow, bool showCheckbox,
     bool showInLegend,
-    List<dynamic> center,
+    JSArray<JSAny> center,
     ChartDataLabels dataLabels,
     bool allowPointSelect,
     bool ignoreHiddenPoint,
@@ -510,9 +479,7 @@ abstract class PiePlotOptions {
     EventPlotOptions events});
 }
 
-@anonymous
-@JS()
-abstract class AreaPlotOptions {
+extension type AreaPlotOptions._(JSObject _) implements JSObject {
 
   external bool get showCheckbox;
   external set showCheckbox(bool v);
@@ -526,8 +493,8 @@ abstract class AreaPlotOptions {
   external String get pointIntervalUnit;
   external set pointIntervalUnit(String v);
 
-  external dynamic get pointPlacement;
-  external set pointPlacement(v);
+  external JSAny get pointPlacement;
+  external set pointPlacement(JSAny v);
 
   external ChartMarker get marker;
   external set marker(ChartMarker v);
@@ -546,14 +513,12 @@ abstract class AreaPlotOptions {
 
   external factory AreaPlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
-    String pointIntervalUnit, pointPlacement,
+    String pointIntervalUnit, JSAny pointPlacement,
     ChartMarker marker, String stacking,
     num lineWidth, String lineColor, EventPlotOptions events});
 }
 
-@anonymous
-@JS()
-abstract class ColumnPlotOptions {
+extension type ColumnPlotOptions._(JSObject _) implements JSObject {
   external bool get showCheckbox;
   external set showCheckbox(bool v);
 
@@ -574,48 +539,44 @@ abstract class ColumnPlotOptions {
 
   external factory ColumnPlotOptions({
     bool showCheckbox,
-    num pointPadding, groupPadding, num borderWidth,
+    num pointPadding, num groupPadding, num borderWidth,
     String stacking, EventPlotOptions events});
 }
 
 
-@anonymous
-@JS()
-abstract class EventPlotOptions {
-  external Function get afterAnimate;
-  external set afterAnimate(Function v);
+extension type EventPlotOptions._(JSObject _) implements JSObject {
+  external JSFunction get afterAnimate;
+  external set afterAnimate(JSFunction v);
 
-  external Function get show;
-  external set show(Function v);
+  external JSFunction get show;
+  external set show(JSFunction v);
 
-  external Function get hide;
-  external set hide(Function v);
+  external JSFunction get hide;
+  external set hide(JSFunction v);
 
-  external Function get click;
-  external set click(Function v);
+  external JSFunction get click;
+  external set click(JSFunction v);
 
-  external Function get checkboxClick;
-  external set checkboxClick(Function v);
+  external JSFunction get checkboxClick;
+  external set checkboxClick(JSFunction v);
 
-  external Function get legendItemClick;
-  external set legendItemClick(Function v);
+  external JSFunction get legendItemClick;
+  external set legendItemClick(JSFunction v);
 
-  external Function get mouseOver;
-  external set mouseOver(Function v);
+  external JSFunction get mouseOver;
+  external set mouseOver(JSFunction v);
 
-  external Function get mouseOut;
-  external set mouseOut(Function v);
+  external JSFunction get mouseOut;
+  external set mouseOut(JSFunction v);
 
-  external factory EventPlotOptions({Function afterAnimate,
-    Function show, Function hide, Function click,
-    Function checkboxClick, Function legendItemClick,
-    Function mouseOver, Function mouseOut});
+  external factory EventPlotOptions({JSFunction afterAnimate,
+    JSFunction show, JSFunction hide, JSFunction click,
+    JSFunction checkboxClick, JSFunction legendItemClick,
+    JSFunction mouseOver, JSFunction mouseOut});
 }
 
 
-@anonymous
-@JS()
-abstract class ChartMarker {
+extension type ChartMarker._(JSObject _) implements JSObject {
 
   external bool get enabled;
   external set enabled(bool v);
@@ -644,9 +605,7 @@ abstract class ChartMarker {
     String? fillColor, String? lineColor, num? lineWidth});
 }
 
-@anonymous
-@JS()
-abstract class ChartStates {
+extension type ChartStates._(JSObject _) implements JSObject {
 
   external ChartHover get hover;
   external set hover(ChartHover v);
@@ -658,9 +617,7 @@ abstract class ChartStates {
     ChartHover hover, String symbol});
 }
 
-@anonymous
-@JS()
-abstract class ChartHover {
+extension type ChartHover._(JSObject _) implements JSObject {
 
   external bool get enabled;
   external set enabled(bool v);
@@ -674,20 +631,17 @@ abstract class ChartHover {
   external factory ChartHover({bool enabled, num brightness, ChartHalo halo});
 }
 
-@anonymous
-@JS()
-abstract class ChartHalo {
+extension type ChartHalo._(JSObject _) implements JSObject {
   external factory ChartHalo();
 }
 
-@anonymous
-@JS()
-abstract class ChartLabels {
-  external Function get formatter;
-  external set formatter(Function v);
+extension type ChartLabels._(JSObject _) implements JSObject {
+  external JSFunction get formatter;
+  external set formatter(JSFunction v);
 
-  external Map<String, String> get style;
-  external set style(Map<String, String> v);
+  // external Map<String, String> get style;
+  external JSObject get style;
+  external set style(JSObject v);
 
   external num get step;
   external set step(num step);
@@ -695,12 +649,10 @@ abstract class ChartLabels {
   external bool get enabled;
   external set enabled(bool v);
 
-  external factory ChartLabels({Function formatter, Map<String, String> style, num step, bool enabled});
+  external factory ChartLabels({JSFunction formatter, JSObject style, num step, bool enabled});
 }
 
-@anonymous
-@JS()
-abstract class ChartDataLabels {
+extension type ChartDataLabels._(JSObject _) implements JSObject {
   external String get color;
   external set color(String v);
 
@@ -710,20 +662,18 @@ abstract class ChartDataLabels {
   external bool get enabled;
   external set enabled(bool v);
 
-  external Function get formatter;
-  external set formatter(Function v);
+  external JSFunction get formatter;
+  external set formatter(JSFunction v);
 
   external factory ChartDataLabels({
     String? color,
     bool? enabled,
     num? distance,
-    Function? formatter});
+    JSFunction? formatter});
 
 }
 
-@anonymous
-@JS()
-abstract class ChartDataSets {
+extension type ChartDataSets._(JSObject _) implements JSObject {
   external String get name;
   external set name(String v);
 
@@ -766,8 +716,8 @@ abstract class ChartDataSets {
   external ChartDataLabels get dataLabels;
   external set dataLabels(ChartDataLabels v);
 
-  external List<dynamic> get data;
-  external set data(List<dynamic> v);
+  external JSArray<JSAny> get data;
+  external set data(JSArray<JSAny> v);
 
   external ChartMarker get marker;
   external set marker(ChartMarker v);
@@ -788,13 +738,11 @@ abstract class ChartDataSets {
     num? startAngle, num? endAngle,
     num? borderRadius, num? borderWidth, String? stack,
     ChartDataLabels? dataLabels,
-    List<dynamic>? data, ChartMarker? marker,
+    JSArray<JSAny>? data, ChartMarker? marker,
     num? fillOpacity, num? lineWidth, String? lineColor});
 }
 
-@anonymous
-@JS()
-abstract class ChartInnerDataSets {
+extension type ChartInnerDataSets._(JSObject _) implements JSObject {
   external String get name;
   external set name(String v);
 
@@ -818,9 +766,7 @@ abstract class ChartInnerDataSets {
     bool? visible, bool? sliced, bool? selected});
 }
 
-@anonymous
-@JS()
-abstract class ChartSeries {
+extension type ChartSeries._(JSObject _) implements JSObject {
   external String get name;
   external set name(String v);
 
@@ -830,9 +776,9 @@ abstract class ChartSeries {
 
   external bool get selected;
 
-  external List<Point> get data;
+  external JSArray<Point> get data;
 
-  external List<Point> get points;
+  external JSArray<Point> get points;
 
   external void setVisible(bool visible, bool redraw);
 
@@ -846,16 +792,14 @@ abstract class ChartSeries {
     String name});
 }
 
-@anonymous
-@JS()
-abstract class Point {
+extension type Point._(JSObject _) implements JSObject {
   external String get category;
   external int get index;
   external String get name;
   external int get plotX;
   external int get plotY;
   external bool get selected;
-  external List<ChartSeries> series;
+  external JSArray<ChartSeries> series;
   external bool get visible;
   external int get x;
   external int get y;

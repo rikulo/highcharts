@@ -3,8 +3,9 @@
 // Author: jimmy
 library highcharts.src.chart;
 
-import 'dart:html';
-import 'dart:js' show allowInteropCaptureThis;
+import 'dart:js_interop';
+
+import 'package:web/web.dart';
 
 import 'chart_model.dart';
 import 'highcharts_js.dart';
@@ -177,9 +178,6 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
 
   //change values of donutchart and redraw it with animation.
   void updatePoint(int seriesIndex, int pointIndex, num value, [bool redraw = true, bool animation = true]);
-
-  //check if index in the list
-  T? at<T>(List<T>? list, int index);
 }
 
 abstract class ColumnChart<S extends Comparable, C extends Comparable> implements Chart<S, C, CategoryModel<S, C>> {
@@ -331,11 +329,11 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
       subtitle: ChartTitle(text: _subtitleText),
       xAxis: xAxis, yAxis: yAxis,
       credits: ChartCredits(enabled: false),
-      series: series);
+      series: series.toJS);
   }
 
   @override
-  List<ChartSeries> get chartSeries => _chart?.series ?? [];
+  List<ChartSeries> get chartSeries => _chart?.series.toDart ?? [];
 
   @override
   T? get model => _model;
@@ -419,13 +417,8 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   @override
   void updatePoint(int seriesIndex, int pointIndex, num value, [bool redraw = true, bool animation = true]){
-      at(at(_chart?.series, seriesIndex)?.points, pointIndex)?.update(value, redraw, animation);
-  }
-
-  @override
-  T? at<T>(List<T>? list, int index){
-    if (list != null && list.length > index && index >= 0) return list[index];
-    return null;
+    _at<Point>(_at<ChartSeries>(_chart?.series.toDart, seriesIndex)?.points.toDart, 
+      pointIndex)?.update(value, redraw, animation);
   }
 }
 
@@ -462,7 +455,7 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
         showInLegend: model.getSeriesStyle(series, SeriesStyle.showInLegend),
         visible: model.getSeriesStyle(series, SeriesStyle.visible) ?? true,
-        data: data[series]));
+        data: data[series]?.jsify() as JSArray<JSAny>));
 
     return list;
   }
@@ -510,12 +503,12 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
         innerSize: innerSize,
         dataLabels: dataLabels,
         visible: visible,
-        data: seriesData):
+        data: seriesData.toJS):
       ChartDataSets(
         name: name, colorByPoint: colorByPoint,
         innerSize: innerSize,
         visible: visible,
-        data: seriesData)];
+        data: seriesData.toJS)];
   }
 }
 
@@ -559,10 +552,10 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
       seriesDatas.add(dataLabels != null ?
         ChartDataSets(size: size, innerSize: innerSize, 
           showInLegend: showInLegend, visible: visible,
-          dataLabels: dataLabels, data: seriesData):
+          dataLabels: dataLabels, data: seriesData.toJS):
         ChartDataSets(size: size, innerSize: innerSize, 
           showInLegend: showInLegend, visible: visible,
-          data: seriesData));
+          data: seriesData.toJS));
     }
 
     return seriesDatas;
@@ -611,18 +604,23 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         showInLegend: model.getSeriesStyle(series, SeriesStyle.showInLegend),
         visible: model.getSeriesStyle(series, SeriesStyle.visible) ?? true,
-        data: data[series]));
+        data: data[series]?.jsify() as JSArray<JSAny>));
     }
     return list;
   }
 }
 
-Function jsFunction(Function f) => allowInteropCaptureThis(f);
+Element _createUncheckedHtml(String html) {
+  final template = HTMLTemplateElement();
+  template.setHTMLUnsafe(html.toJS);
+  return template.content.firstElementChild!;
+}
 
-Element _createUncheckedHtml(String html)
-=> Element.html(html, treeSanitizer: NodeTreeSanitizer.trusted);
-
-
+T? _at<T>(List<T?>? list, int index) {
+  if (list != null && list.length > index && index >= 0)
+    return list[index];
+  return null;
+}
 
 /* column chart sample
 new HighChart(div, new ChartConfiguration(
