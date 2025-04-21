@@ -312,7 +312,7 @@ void _renderAreaChart(AreaChart chart) {
   chart.yAxis = ChartYAxis(
     title: ChartTitle(
       text: 'Nuclear weapon states'),
-    labels: ChartLabels(formatter: (JSObject self) {
+    labels: ChartLabels(style: {'color': 'red'}.jsify() as DOMStringMap, formatter: (JSObject self) {
         return '${(self.getProperty('value'.toJS) as JSNumber).toDartDouble/1000}k';
     }.toJSCaptureThis));
 

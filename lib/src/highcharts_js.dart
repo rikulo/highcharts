@@ -4,6 +4,7 @@
 @JS()
 library highcharts.src.highcharts_js;
 
+import 'package:web/web.dart';
 import 'dart:js_interop';
 
 @JS('Highcharts')
@@ -299,9 +300,8 @@ extension type ChartLegend._(JSObject _) implements JSObject {
   external bool get enabled;
   external set enabled(bool v);
 
-  // external Map<String, String> get itemStyle;
-  external JSObject get itemStyle;
-  external set itemStyle(JSObject v);
+  external DOMStringMap get itemStyle;
+  external set itemStyle(DOMStringMap v);
 
   external factory ChartLegend({
     String align,
@@ -314,7 +314,7 @@ extension type ChartLegend._(JSObject _) implements JSObject {
     bool floating,
     bool shadow,
     bool enabled,
-    JSObject itemStyle});
+    DOMStringMap itemStyle});
 }
 
 extension type ChartCredits._(JSObject _) implements JSObject {
@@ -639,9 +639,8 @@ extension type ChartLabels._(JSObject _) implements JSObject {
   external JSFunction get formatter;
   external set formatter(JSFunction v);
 
-  // external Map<String, String> get style;
-  external JSObject get style;
-  external set style(JSObject v);
+  external DOMStringMap get style;
+  external set style(DOMStringMap v);
 
   external num get step;
   external set step(num step);
@@ -649,7 +648,7 @@ extension type ChartLabels._(JSObject _) implements JSObject {
   external bool get enabled;
   external set enabled(bool v);
 
-  external factory ChartLabels({JSFunction formatter, JSObject style, num step, bool enabled});
+  external factory ChartLabels({JSFunction formatter, DOMStringMap style, num step, bool enabled});
 }
 
 extension type ChartDataLabels._(JSObject _) implements JSObject {
