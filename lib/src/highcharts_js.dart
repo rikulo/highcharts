@@ -1,7 +1,6 @@
 //Copyright (C) 2016 Potix Corporation. All Rights Reserved.
 //History: Tue Feb 16 4:08 PM CST 2017
 // Author: jimmy
-@JS()
 library highcharts.src.highcharts_js;
 
 import 'package:web/web.dart';
@@ -673,8 +672,8 @@ extension type ChartDataLabels._(JSObject _) implements JSObject {
 }
 
 extension type ChartDataSets._(JSObject _) implements JSObject {
-  external String get name;
-  external set name(String v);
+  external String? get name;
+  external set name(String? v);
 
   external String get color;
   external set color(String v);
