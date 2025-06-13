@@ -201,6 +201,13 @@ abstract class DonutChart<S extends Comparable, C extends Comparable> extends Ch
       width: width, height: height, xAxis: xAxis, yAxis: yAxis);
 }
 
+abstract class LineChart<S extends Comparable, C extends Comparable> extends Chart<S, C, CategoryModel<S, C>> {
+  factory LineChart({String titleText = '', String subtitleText = '',
+  dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
+  => _LineChartImpl<S, C>(titleText: titleText, subtitleText: subtitleText,
+      width: width, height: height, xAxis: xAxis, yAxis: yAxis);
+}
+
 abstract class AreaChart<S extends Comparable, C extends Comparable> extends Chart<S, C, CategoryModel<S, C>> {
   factory AreaChart({String titleText = '', String subtitleText = '',
   dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis})
@@ -425,10 +432,9 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 class _ColumnChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements ColumnChart<S, C> {
 
-  _ColumnChartImpl({String titleText = '', String subtitleText = '',
-    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
-  super(ChartType.column, titleText: titleText, subtitleText: subtitleText,
-    width: width, height: height, xAxis: xAxis, yAxis: yAxis);
+  _ColumnChartImpl({super.titleText = '', super.subtitleText = '',
+    super.width, super.height, super.xAxis, super.yAxis}):
+  super(ChartType.column);
 
   @override
   List<ChartDataSets> get series {
@@ -465,11 +471,9 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
 class _PieChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, SingleValueCategoryModel<S, C>> implements PieChart<S, C> {
 
-  _PieChartImpl({String titleText = '', String subtitleText = '',
-    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
-  super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
-    width: width, height: height, xAxis: xAxis, yAxis: yAxis) {
-  }
+  _PieChartImpl({super.titleText = '', super.subtitleText = '',
+    super.width, super.height, super.xAxis, super.yAxis}):
+  super(ChartType.pie);
 
   @override
   List<ChartDataSets> get series {
@@ -515,10 +519,9 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
 class _DonutChartImpl<S extends Comparable, C extends Comparable>
   extends _BaseChartImpl<S, C, DonutModel<S, C>> implements DonutChart<S, C> {
 
-  _DonutChartImpl({String titleText = '', String subtitleText = '',
-    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
-  super(ChartType.pie, titleText: titleText, subtitleText: subtitleText,
-    width: width, height: height, xAxis: xAxis, yAxis: yAxis);
+  _DonutChartImpl({super.titleText = '', super.subtitleText = '',
+    super.width, super.height, super.xAxis, super.yAxis}):
+  super(ChartType.pie);
 
   @override
   List<ChartDataSets> get series {
@@ -562,13 +565,11 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
   }
 }
 
-class _AreaChartImpl<S extends Comparable, C extends Comparable>
-  extends _BaseChartImpl<S, C, CategoryModel<S, C>> implements AreaChart<S, C> {
+abstract class _LineChartBase<S extends Comparable, C extends Comparable>
+  extends _BaseChartImpl<S, C, CategoryModel<S, C>> {
 
-  _AreaChartImpl({String titleText = '', String subtitleText = '',
-    dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
-  super(ChartType.area, titleText: titleText, subtitleText: subtitleText,
-    width: width, height: height, xAxis: xAxis, yAxis: yAxis);
+  _LineChartBase(super.type, {super.titleText = '', super.subtitleText = '',
+    super.width, super.height, super.xAxis, super.yAxis});
 
   @override
   List<ChartDataSets> get series {
@@ -608,6 +609,22 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
     }
     return list;
   }
+}
+
+class _LineChartImpl<S extends Comparable, C extends Comparable>
+  extends _LineChartBase<S, C> implements LineChart<S, C> {
+
+  _LineChartImpl({super.titleText = '', super.subtitleText = '',
+    super.width, super.height, super.xAxis, super.yAxis}):
+  super(ChartType.line);
+}
+
+class _AreaChartImpl<S extends Comparable, C extends Comparable>
+  extends _LineChartBase<S, C> implements AreaChart<S, C> {
+
+  _AreaChartImpl({super.titleText = '', super.subtitleText = '',
+    super.width, super.height, super.xAxis, super.yAxis}):
+  super(ChartType.area);
 }
 
 Element _createUncheckedHtml(String html) {

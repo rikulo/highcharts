@@ -1,5 +1,8 @@
 # CHANGES
 
+**4.0.1**
+* Added Line chart
+
 **4.0.0**
 * Dart 3.7 required
 
