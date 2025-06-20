@@ -21,7 +21,7 @@ extension type HighChart._(JSObject _) implements JSObject {
   external void redraw();
   external void update(ChartConfiguration options, bool redraw);
   external void reflow();
-  external void setSize(num? width, num? height, AnimationOptions? animation);
+  external void setSize(num? width, num? height, JSAny? animation);
   external void destroy();
 
   external factory HighChart(JSAny container, ChartConfiguration options);
@@ -50,6 +50,9 @@ extension type ChartConfiguration._(JSObject _) implements JSObject {
   external ChartLegend get legend;
   external set legend(ChartLegend v);
 
+  external ChartResponsive? get responsive;
+  external set responsive(ChartResponsive? v);
+
   external ChartCredits get credits;
   external set credits(ChartCredits v);
 
@@ -74,6 +77,7 @@ extension type ChartConfiguration._(JSObject _) implements JSObject {
     ChartXAxis? xAxis, ChartYAxis? yAxis,
     ChartCredits credits,
     ChartLegend legend,
+    ChartResponsive? responsive,
     ChartTooltip tooltip,
     ChartPlotOptions plotOptions,
     ChartAccessibility accessibility,
@@ -275,6 +279,9 @@ extension type ChartLegend._(JSObject _) implements JSObject {
   external num get itemMarginBottom;
   external set itemMarginBottom(num v);
 
+  external num get itemWidth;
+  external set itemWidth(num v);
+
   external num get symbolPadding;
   external set symbolPadding(num v);
 
@@ -302,18 +309,57 @@ extension type ChartLegend._(JSObject _) implements JSObject {
   external DOMStringMap get itemStyle;
   external set itemStyle(DOMStringMap v);
 
+  external bool get useHTML;
+  external set useHTML(bool v);
+
+  external JSAny? get navigation;
+  external set navigation(JSAny? v);
+
+  external JSFunction get labelFormatter;
+  external set labelFormatter(JSFunction v);
+
   external factory ChartLegend({
     String align,
     String verticalAlign,
     String layout,
-    num x, num y, num width, num margin, num padding, num itemMarginTop, num itemMarginBottom,
+    num x, num y, num width, num margin, num padding, 
+    num itemMarginTop, num itemMarginBottom, num itemWidth,
     num symbolPadding, num symbolHeight, num symbolWidth,
     String borderColor,
     num borderWidth,
     bool floating,
+    bool reversed,
     bool shadow,
     bool enabled,
-    DOMStringMap itemStyle});
+    bool useHTML,
+    JSAny navigation,
+    JSFunction labelFormatter,
+    DOMStringMap itemStyle,
+    DOMStringMap itemHoverStyle});
+}
+
+extension type ChartResponsive._(JSObject _) implements JSObject {
+
+  external JSArray<ChartResponsiveRules> get rules;
+  external set rules(JSArray<ChartResponsiveRules> v);
+
+  external factory ChartResponsive({
+    JSArray<ChartResponsiveRules> rules,
+  });
+}
+
+extension type ChartResponsiveRules._(JSObject _) implements JSObject {
+
+  external JSObject get condition;
+  external set condition(JSObject v);
+
+  external JSObject get chartOptions;
+  external set chartOptions(JSObject v);
+
+  external factory ChartResponsiveRules({
+    JSObject condition,
+    JSObject chartOptions,
+  });
 }
 
 extension type ChartCredits._(JSObject _) implements JSObject {
@@ -367,9 +413,13 @@ extension type ChartPlotOptions._(JSObject _) implements JSObject {
   external AreaPlotOptions get area;
   external set area(AreaPlotOptions v);
 
+  external LinePlotOptions get line;
+  external set line(LinePlotOptions v);
+
   external factory ChartPlotOptions({
     ColumnPlotOptions column,
     PiePlotOptions pie,
+    LinePlotOptions line,
     AreaPlotOptions area});
 }
 
@@ -423,7 +473,15 @@ extension type ChartAccessibilityPoint._(JSObject _) implements JSObject {
     String? valuePrefix, String? valueSuffix});
 }
 
-extension type PiePlotOptions._(JSObject _) implements JSObject {
+extension type PlotOptions._(JSObject _) implements JSObject {
+  external bool get showCheckbox;
+  external set showCheckbox(bool v);
+
+  external EventPlotOptions get events;
+  external set events(EventPlotOptions v);
+}
+
+extension type PiePlotOptions._(JSObject _) implements PlotOptions, JSObject {
 
   external String get cursor;
   external set cursor(String v);
@@ -446,9 +504,6 @@ extension type PiePlotOptions._(JSObject _) implements JSObject {
   external bool get allowPointSelect;
   external set allowPointSelect(bool v);
 
-  external bool get showCheckbox;
-  external set showCheckbox(bool v);
-
   external String get size;
   external set size(String v);
 
@@ -461,9 +516,6 @@ extension type PiePlotOptions._(JSObject _) implements JSObject {
   external num get endAngle;
   external set endAngle(num v);
 
-  external EventPlotOptions get events;
-  external set events(EventPlotOptions v);
-
   external factory PiePlotOptions({
     String cursor,
     bool shadow, bool showCheckbox,
@@ -475,14 +527,11 @@ extension type PiePlotOptions._(JSObject _) implements JSObject {
     String size, ChartStates states,
     num startAngle, num endAngle,
     String borderColor, num borderWidth,
-    EventPlotOptions events});
+    JSObject? point,
+    EventPlotOptions? events});
 }
 
-extension type AreaPlotOptions._(JSObject _) implements JSObject {
-
-  external bool get showCheckbox;
-  external set showCheckbox(bool v);
-
+extension type LinePlotOptionsBase._(JSObject _) implements PlotOptions, JSObject {
   external num get pointStart;
   external set pointStart(num v);
 
@@ -503,12 +552,20 @@ extension type AreaPlotOptions._(JSObject _) implements JSObject {
 
   external num get lineWidth;
   external set lineWidth(num v);
+}
+
+extension type LinePlotOptions._(JSObject _) implements LinePlotOptionsBase, JSObject {
+  external factory LinePlotOptions({
+    num pointStart, num pointInterval, bool showCheckbox,
+    String pointIntervalUnit, JSAny pointPlacement,
+    ChartMarker marker, String stacking,
+    num lineWidth, EventPlotOptions events});
+}
+
+extension type AreaPlotOptions._(JSObject _) implements LinePlotOptionsBase, JSObject {
 
   external String get lineColor;
   external set lineColor(String v);
-
-  external EventPlotOptions get events;
-  external set events(EventPlotOptions v);
 
   external factory AreaPlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
@@ -517,9 +574,7 @@ extension type AreaPlotOptions._(JSObject _) implements JSObject {
     num lineWidth, String lineColor, EventPlotOptions events});
 }
 
-extension type ColumnPlotOptions._(JSObject _) implements JSObject {
-  external bool get showCheckbox;
-  external set showCheckbox(bool v);
+extension type ColumnPlotOptions._(JSObject _) implements PlotOptions, JSObject {
 
   external num get pointPadding;
   external set pointPadding(num v);
@@ -533,15 +588,11 @@ extension type ColumnPlotOptions._(JSObject _) implements JSObject {
   external String get stacking;
   external set stacking(String v);
 
-  external EventPlotOptions get events;
-  external set events(EventPlotOptions v);
-
   external factory ColumnPlotOptions({
     bool showCheckbox,
     num pointPadding, num groupPadding, num borderWidth,
     String stacking, EventPlotOptions events});
 }
-
 
 extension type EventPlotOptions._(JSObject _) implements JSObject {
   external JSFunction get afterAnimate;
@@ -573,7 +624,6 @@ extension type EventPlotOptions._(JSObject _) implements JSObject {
     JSFunction checkboxClick, JSFunction legendItemClick,
     JSFunction mouseOver, JSFunction mouseOut});
 }
-
 
 extension type ChartMarker._(JSObject _) implements JSObject {
 
@@ -671,13 +721,21 @@ extension type ChartDataLabels._(JSObject _) implements JSObject {
 
 }
 
-extension type ChartDataSets._(JSObject _) implements JSObject {
+extension type ChartDataSetsBase._(JSObject _) implements JSObject {
   external String? get name;
   external set name(String? v);
 
   external String get color;
   external set color(String v);
 
+  external num get y;
+  external set y(num v);
+
+  external bool get visible;
+  external set visible(bool v);
+}
+
+extension type ChartDataSets._(JSObject _) implements ChartDataSetsBase, JSObject {
   external String get stack;
   external set stack(String v);
 
@@ -686,9 +744,6 @@ extension type ChartDataSets._(JSObject _) implements JSObject {
 
   external String get innerSize;
   external set innerSize(String v);
-
-  external num get y;
-  external set y(num v);
 
   external num get startAngle;
   external set startAngle(num v);
@@ -701,9 +756,6 @@ extension type ChartDataSets._(JSObject _) implements JSObject {
 
   external num get borderWidth;
   external set borderWidth(num v);
-
-  external bool get visible;
-  external set visible(bool v);
 
   external bool get colorByPoint;
   external set colorByPoint(bool v);
@@ -740,19 +792,7 @@ extension type ChartDataSets._(JSObject _) implements JSObject {
     num? fillOpacity, num? lineWidth, String? lineColor});
 }
 
-extension type ChartInnerDataSets._(JSObject _) implements JSObject {
-  external String get name;
-  external set name(String v);
-
-  external num get y;
-  external set y(num v);
-
-  external num get color;
-  external set color(num v);
-
-  external bool get visible;
-  external set visible(bool v);
-
+extension type ChartInnerDataSets._(JSObject _) implements ChartDataSetsBase, JSObject {
   external bool get sliced;
   external set sliced(bool v);
 
@@ -761,6 +801,7 @@ extension type ChartInnerDataSets._(JSObject _) implements JSObject {
 
   external factory ChartInnerDataSets({
     String name, num? y, String? color,
+    int? legendIndex,
     bool? visible, bool? sliced, bool? selected});
 }
 
@@ -770,13 +811,15 @@ extension type ChartSeries._(JSObject _) implements JSObject {
 
   external String get type;
 
+  external int get index;
+
   external bool get visible;
 
   external bool get selected;
 
-  external JSArray<Point> get data;
+  external JSArray<ChartPoint> get data;
 
-  external JSArray<Point> get points;
+  external JSArray<ChartPoint> get points;
 
   external void setVisible(bool visible, bool redraw);
 
@@ -790,17 +833,23 @@ extension type ChartSeries._(JSObject _) implements JSObject {
     String name});
 }
 
-extension type Point._(JSObject _) implements JSObject {
+extension type ChartPoint._(JSObject _) implements JSObject {
   external String get category;
   external int get index;
   external String get name;
+  external String get color;
   external int get plotX;
   external int get plotY;
   external bool get selected;
-  external JSArray<ChartSeries> series;
+  external ChartSeries series;
   external bool get visible;
   external int get x;
   external int get y;
+  external int get total;
+  external num get percentage;
+  external JSObject get legendGroup;
+  external JSObject get legendItem;
+  external JSObject get legendSymbol;
 
   external void update(num yValue, bool? redraw, bool? animation);
   external void remove();

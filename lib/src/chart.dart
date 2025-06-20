@@ -103,6 +103,9 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
    */
   void set plotOptions(ChartPlotOptions? plotOptions);
 
+  ChartResponsive? get responsive;
+  void set responsive(ChartResponsive? responsive);
+
   /**
    * Returns legend of chart
    */
@@ -174,7 +177,7 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
    * In order to set the width only, the height argument may be skipped.
    * To set the height only, pass undefined for the width.
    */
-  void setSize([num width, num height, AnimationOptions animation]);
+  void setSize([num width, num height, JSAny animation]);
 
   //change values of donutchart and redraw it with animation.
   void updatePoint(int seriesIndex, int pointIndex, num value, [bool redraw = true, bool animation = true]);
@@ -241,6 +244,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   ChartYAxis? _yAxis;
   ChartOptions? _chartOptions;
   ChartPlotOptions? _plotOptions;
+  ChartResponsive? _responsive;
   ChartLegend? _legend;
   ChartTooltip? _tooltip;
   ChartAccessibility? _accessibility;
@@ -308,6 +312,13 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   }
 
   @override
+  ChartResponsive? get responsive => _responsive;
+  @override
+  void set responsive(ChartResponsive? responsive) {
+    _responsive = responsive;
+  }
+
+  @override
   ChartLegend? get legend => _legend;
   @override
   void set legend(ChartLegend? legend) {
@@ -336,6 +347,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
       subtitle: ChartTitle(text: _subtitleText),
       xAxis: xAxis, yAxis: yAxis,
       credits: ChartCredits(enabled: false),
+      responsive: responsive,
       series: series.toJS);
   }
 
@@ -408,7 +420,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   }
 
   @override
-  void setSize([num? width, num? height, AnimationOptions? animation]) {
+  void setSize([num? width, num? height, JSAny? animation]) {
     _chart?.setSize(width, height, animation);
   }
 
@@ -424,7 +436,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   @override
   void updatePoint(int seriesIndex, int pointIndex, num value, [bool redraw = true, bool animation = true]){
-    _at<Point>(_at<ChartSeries>(_chart?.series.toDart, seriesIndex)?.points.toDart, 
+    _at<ChartPoint>(_at<ChartSeries>(_chart?.series.toDart, seriesIndex)?.points.toDart, 
       pointIndex)?.update(value, redraw, animation);
   }
 }
@@ -542,6 +554,7 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
           name: category.toString(),
           y: singleCategoryModel.getValue(category),
           color: singleCategoryModel.getValueColor(category),
+          legendIndex: singleCategoryModel.getLegendIndex(category),
           visible: singleCategoryModel.getValueColor(category) != null));
       }
 

@@ -96,9 +96,17 @@ abstract class SingleValueCategoryModel<S extends Comparable, C extends Comparab
 
   // Sets value of [series] style
   void setSingleSeriesStyle(SeriesStyle name, dynamic value);
+
+  // Returns index of legend of provided [category]
+  int? getLegendIndex(C category);
+
+  // Sets index of legend of provided [category]
+  void setLegendIndex(C category, int? value);
 }
 
-class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChartModel<String, C> implements SingleValueCategoryModel<String, C> {
+class DefaultSingleValueCategoryModel<C extends Comparable> 
+extends AbstractChartModel<String, C> implements SingleValueCategoryModel<String, C> {
+  final _legendIndexIndex = <C, int?>{};
   final _data = <C, num?>{};
   final _color = <C, String>{};
   final _categoryStyle = <C, Map<SeriesStyle, dynamic>>{};
@@ -134,6 +142,18 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChar
     _data[category] = value;
   }
 
+  @override
+  int? getLegendIndex(C category) => _legendIndexIndex[category];
+
+  @override
+  void setLegendIndex(C category, int? value) {
+    if (value == null) {
+      _legendIndexIndex.remove(category);
+    } else {
+      _legendIndexIndex[category] = value;
+    }
+  }
+
   // Sets color
   @override
   String? getValueColor(C category) => _color[category];
@@ -163,6 +183,7 @@ class DefaultSingleValueCategoryModel<C extends Comparable> extends AbstractChar
   void clear() {
     super.clear();
 
+    _legendIndexIndex.clear();
     _data.clear();
     _color.clear();
     _categoryStyle.clear();

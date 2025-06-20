@@ -2,6 +2,7 @@
 
 **4.0.1**
 * Added Line chart
+* Added LinePlotOptions
 
 **4.0.0**
 * Dart 3.7 required
