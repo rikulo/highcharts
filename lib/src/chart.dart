@@ -373,10 +373,10 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
     if (_chart == null)
       _initChart();
     else
-      _chart?.update(_chartConfig, true);
+      _chart?.update(_newChartConfig(), true, true, false);
   }
 
-  void _initChart() {
+  ChartConfiguration _newChartConfig() {
     final config = _chartConfig;
 
     if (tooltip != null)
@@ -391,7 +391,11 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
     if (accessibility != null)
       config.accessibility = accessibility!;
 
-    _chart = HighChart(element, config);
+    return config;
+  }
+
+  void _initChart() {
+    _chart = HighChart(element, _newChartConfig());
   }
 
   @override
@@ -406,7 +410,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   @override
   void update() {
-    _chart?.update(_chartConfig, true);
+    _chart?.update(_newChartConfig(), true, true, false);
   }
 
   @override
@@ -432,6 +436,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   @override
   void destroy() {
     _chart?.destroy();
+    _chart = null;
   }
 
   @override

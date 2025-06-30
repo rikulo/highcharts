@@ -19,7 +19,7 @@ extension type HighChart._(JSObject _) implements JSObject {
   external ChartSeries addSeries (ChartDataSets options, [bool redraw, bool animation]);
 
   external void redraw();
-  external void update(ChartConfiguration options, bool redraw);
+  external void update(ChartConfiguration options, [bool redraw, bool oneToOne, bool animation]);
   external void reflow();
   external void setSize(num? width, num? height, JSAny? animation);
   external void destroy();
@@ -244,7 +244,9 @@ extension type ChartYAxis._(JSObject _) implements JSObject {
     ChartTitle title, num min,
     ChartLabels labels,
     String gridLineColor, num tickAmount,
-    num tickInterval, JSFunction tickPositioner, bool showFirstLabel,
+    num tickInterval, JSFunction tickPositioner, 
+    bool showFirstLabel,
+    JSObject stackLabels,
     String type, ChartAccessibility accessibility});
 }
 
@@ -558,7 +560,7 @@ extension type LinePlotOptions._(JSObject _) implements LinePlotOptionsBase, JSO
   external factory LinePlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, JSAny pointPlacement,
-    ChartMarker marker, String stacking,
+    ChartMarker marker, String? stacking,
     num lineWidth, EventPlotOptions events});
 }
 
@@ -570,7 +572,7 @@ extension type AreaPlotOptions._(JSObject _) implements LinePlotOptionsBase, JSO
   external factory AreaPlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, JSAny pointPlacement,
-    ChartMarker marker, String stacking,
+    ChartMarker marker, String? stacking,
     num lineWidth, String lineColor, EventPlotOptions events});
 }
 
@@ -591,7 +593,7 @@ extension type ColumnPlotOptions._(JSObject _) implements PlotOptions, JSObject 
   external factory ColumnPlotOptions({
     bool showCheckbox,
     num pointPadding, num groupPadding, num borderWidth,
-    String stacking, EventPlotOptions events});
+    String? stacking, EventPlotOptions events});
 }
 
 extension type EventPlotOptions._(JSObject _) implements JSObject {

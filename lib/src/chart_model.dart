@@ -332,8 +332,9 @@ class DefaultCategoryModel<S extends Comparable, C extends Comparable>
       }
 
       while (categories.isNotEmpty) {
-        final cate = categories.cast<C?>().firstWhere(list.contains, orElse: () => null);
-        var i = cate != null ? categories.indexOf(cate): -1;
+        var i = categories.cast<C?>().indexWhere(list.contains);
+        if (i < 0) break;
+        
         categories.removeAt(i);
         while (i > 0) {
           list.add(categories.removeAt(0));
