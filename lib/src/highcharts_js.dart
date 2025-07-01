@@ -187,6 +187,7 @@ extension type ChartXAxis._(JSObject _) implements JSObject {
   external set accessibility(ChartAccessibility v);
 
   external factory ChartXAxis({
+    ChartTitle title, 
     JSArray<JSAny> categories,
     ChartLabels labels,
     bool allowDecimals, JSAny crosshair, num tickLength,
@@ -560,7 +561,7 @@ extension type LinePlotOptions._(JSObject _) implements LinePlotOptionsBase, JSO
   external factory LinePlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, JSAny pointPlacement,
-    ChartMarker marker, String? stacking,
+    ChartMarker marker, String? stacking, ChartDataLabels dataLabels,
     num lineWidth, EventPlotOptions events});
 }
 
@@ -572,7 +573,7 @@ extension type AreaPlotOptions._(JSObject _) implements LinePlotOptionsBase, JSO
   external factory AreaPlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, JSAny pointPlacement,
-    ChartMarker marker, String? stacking,
+    ChartMarker marker, String? stacking, ChartDataLabels dataLabels,
     num lineWidth, String lineColor, EventPlotOptions events});
 }
 
@@ -591,7 +592,7 @@ extension type ColumnPlotOptions._(JSObject _) implements PlotOptions, JSObject 
   external set stacking(String v);
 
   external factory ColumnPlotOptions({
-    bool showCheckbox,
+    bool showCheckbox, ChartDataLabels dataLabels,
     num pointPadding, num groupPadding, num borderWidth,
     String? stacking, EventPlotOptions events});
 }
@@ -687,6 +688,10 @@ extension type ChartHalo._(JSObject _) implements JSObject {
 }
 
 extension type ChartLabels._(JSObject _) implements JSObject {
+  
+  external bool get useHTML;
+  external set useHTML(bool v);
+
   external JSFunction get formatter;
   external set formatter(JSFunction v);
 
@@ -718,6 +723,7 @@ extension type ChartDataLabels._(JSObject _) implements JSObject {
   external factory ChartDataLabels({
     String? color,
     bool? enabled,
+    bool useHTML,
     num? distance,
     JSFunction? formatter});
 
@@ -789,6 +795,7 @@ extension type ChartDataSets._(JSObject _) implements ChartDataSetsBase, JSObjec
     bool? visible, bool? colorByPoint, bool? showInLegend,
     num? startAngle, num? endAngle,
     num? borderRadius, num? borderWidth, String? stack,
+    ChartLabels? label,
     ChartDataLabels? dataLabels,
     JSArray<JSAny>? data, ChartMarker? marker,
     num? fillOpacity, num? lineWidth, String? lineColor});

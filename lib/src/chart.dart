@@ -140,6 +140,12 @@ abstract class Chart<S extends Comparable, C extends Comparable, T extends Chart
 
   set isDirtyBox(bool v);
 
+  ChartLabels? get seriesLabel;
+  void set seriesLabel(ChartLabels? seriesLabel);
+
+  ChartLabels? get categoryLabel;
+  void set categoryLabel(ChartLabels? categoryLabel);
+
   ///Add a series to the chart after render time. 
   ///Note that this method should never be used 
   ///when adding data synchronously at chart render time, 
@@ -248,6 +254,8 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   ChartLegend? _legend;
   ChartTooltip? _tooltip;
   ChartAccessibility? _accessibility;
+  ChartLabels? _seriesLabel, _categoryLabel;
+
 
   HighChart? _chart;
   T? _model;
@@ -330,6 +338,20 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   @override
   void set tooltip(ChartTooltip? tooltip) {
     this._tooltip = tooltip;
+  }
+
+  @override
+  ChartLabels? get seriesLabel => _seriesLabel;
+  @override
+  void set seriesLabel(ChartLabels? seriesLabel) {
+    this._seriesLabel = seriesLabel;
+  }
+
+  @override
+  ChartLabels? get categoryLabel => _categoryLabel;
+  @override
+  void set categoryLabel(ChartLabels? categoryLabel) {
+    this._categoryLabel = categoryLabel;
   }
 
   @override
@@ -473,6 +495,7 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
     for (final series in data.keys)
       list.add(ChartDataSets(
         name: series.toString(),
+        label: _seriesLabel,
         color: model.getSeriesStyle(series, SeriesStyle.color),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
@@ -521,12 +544,14 @@ class _PieChartImpl<S extends Comparable, C extends Comparable>
     return [dataLabels != null ?
       ChartDataSets(
         name: name, colorByPoint: colorByPoint,
+        label: _categoryLabel,
         innerSize: innerSize,
         dataLabels: dataLabels,
         visible: visible,
         data: seriesData.toJS):
       ChartDataSets(
         name: name, colorByPoint: colorByPoint,
+        label: _categoryLabel,
         innerSize: innerSize,
         visible: visible,
         data: seriesData.toJS)];
@@ -572,9 +597,11 @@ class _DonutChartImpl<S extends Comparable, C extends Comparable>
       //Cannot set a null dataLabels to ChartDataSets(dataLabels: dataLabels)
       seriesDatas.add(dataLabels != null ?
         ChartDataSets(size: size, innerSize: innerSize, 
+          label: _categoryLabel,
           showInLegend: showInLegend, visible: visible,
           dataLabels: dataLabels, data: seriesData.toJS):
         ChartDataSets(size: size, innerSize: innerSize, 
+          label: _categoryLabel,
           showInLegend: showInLegend, visible: visible,
           data: seriesData.toJS));
     }
@@ -616,6 +643,7 @@ abstract class _LineChartBase<S extends Comparable, C extends Comparable>
       if (markerEnabled != null) marker.enabled = markerEnabled; // since null = true in charts
       list.add(ChartDataSets(
         name: series.toString(),
+        label: _seriesLabel,
         color: model.getSeriesStyle(series, SeriesStyle.color),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
         marker: marker,
