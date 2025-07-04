@@ -417,7 +417,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   }
 
   void _initChart() {
-    _chart = HighChart(element, _newChartConfig());
+    _chart = Highcharts.chart(element, _newChartConfig());
   }
 
   @override

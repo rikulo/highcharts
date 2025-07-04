@@ -9,6 +9,8 @@ import 'dart:js_interop';
 @JS('Highcharts')
 extension type Highcharts._(JSObject _) implements JSObject {
   external static ChartOptionsStatic getOptions();
+
+  external static HighChart chart(JSAny container, ChartConfiguration options);
 }
 
 @JS('Highcharts.chart')
@@ -23,8 +25,6 @@ extension type HighChart._(JSObject _) implements JSObject {
   external void reflow();
   external void setSize(num? width, num? height, JSAny? animation);
   external void destroy();
-
-  external factory HighChart(JSAny container, ChartConfiguration options);
 
   external set isDirtyLegend(bool v);
   external set isDirtyBox(bool v);
