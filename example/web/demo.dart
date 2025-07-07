@@ -160,7 +160,7 @@ void _renderPieChart(PieChart chart) {
       pie: PiePlotOptions(
         allowPointSelect: true,
         cursor: 'pointer',
-        dataLabels: ChartDataLabels(enabled: false),
+        dataLabels: [ChartDataLabels(enabled: false)].jsify() as JSArray<ChartDataLabels>,
         showInLegend: true,
         showCheckbox: true,
         events: EventPlotOptions(checkboxClick: (JSObject self, JSObject event) {
@@ -249,7 +249,7 @@ void _renderDonutChart(DonutChart chart) {
           (self.getProperty('point'.toJS) as JSObject).getProperty('name'.toJS): null;
       }.toJSCaptureThis,
     color: '#ffffff',
-    distance: -30
+    distance: (-30).toJS
   ));
 
   model.setSeriesStyle("Versions", SeriesStyle.size, '80%');
