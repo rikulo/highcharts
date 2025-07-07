@@ -495,7 +495,7 @@ class _ColumnChartImpl<S extends Comparable, C extends Comparable>
     for (final series in data.keys)
       list.add(ChartDataSets(
         name: series.toString(),
-        label: _seriesLabel,
+        // label: _seriesLabel,
         color: model.getSeriesStyle(series, SeriesStyle.color),
         borderRadius: model.getSeriesStyle(series, SeriesStyle.borderRadius),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
@@ -643,7 +643,7 @@ abstract class _LineChartBase<S extends Comparable, C extends Comparable>
       if (markerEnabled != null) marker.enabled = markerEnabled; // since null = true in charts
       list.add(ChartDataSets(
         name: series.toString(),
-        label: _seriesLabel,
+        // label: _seriesLabel,
         color: model.getSeriesStyle(series, SeriesStyle.color),
         fillOpacity: model.getSeriesStyle(series, SeriesStyle.fillOpacity),
         marker: marker,

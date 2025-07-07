@@ -112,7 +112,8 @@ extension type ChartOptions._(JSObject _) implements JSObject {
   external set zoomType(String v);
 
   external factory ChartOptions({String type,
-    JSAny? width, JSAny? height, JSArray<JSNumber> margin, num marginTop, String zoomKey, String zoomType});
+    JSAny? width, JSAny? height, JSArray<JSNumber>? margin, 
+    num? marginTop, String? zoomKey, String? zoomType});
 }
 
 extension type AnimationOptions._(JSObject _) implements JSObject {
@@ -140,7 +141,9 @@ extension type ChartTitle._(JSObject _) implements JSObject {
   external String get text;
   external set text(String v);
 
-  external factory ChartTitle({String text});
+  external factory ChartTitle({String text,
+    bool useHTML = false,
+    DOMStringMap? style});
 }
 
 extension type ChartXAxis._(JSObject _) implements JSObject {
@@ -423,7 +426,8 @@ extension type ChartPlotOptions._(JSObject _) implements JSObject {
     ColumnPlotOptions column,
     PiePlotOptions pie,
     LinePlotOptions line,
-    AreaPlotOptions area});
+    AreaPlotOptions area,
+    SeriesPlotOptions series});
 }
 
 extension type ChartAccessibility._(JSObject _) implements JSObject {
@@ -524,7 +528,7 @@ extension type PiePlotOptions._(JSObject _) implements PlotOptions, JSObject {
     bool shadow, bool showCheckbox,
     bool showInLegend,
     JSArray<JSAny> center,
-    ChartDataLabels dataLabels,
+    JSArray<ChartDataLabels> dataLabels,
     bool allowPointSelect,
     bool ignoreHiddenPoint,
     String size, ChartStates states,
@@ -557,11 +561,22 @@ extension type LinePlotOptionsBase._(JSObject _) implements PlotOptions, JSObjec
   external set lineWidth(num v);
 }
 
+extension type SeriesPlotOptions._(JSObject _) implements LinePlotOptionsBase, JSObject {
+  external factory SeriesPlotOptions({
+    num pointStart, num pointInterval, bool showCheckbox,
+    String pointIntervalUnit, JSAny pointPlacement,
+    ChartMarker marker, String? stacking, 
+    ChartLabels? label,
+    JSArray<ChartDataLabels> dataLabels,
+    num lineWidth, EventPlotOptions events});
+}
+
 extension type LinePlotOptions._(JSObject _) implements LinePlotOptionsBase, JSObject {
   external factory LinePlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, JSAny pointPlacement,
-    ChartMarker marker, String? stacking, ChartDataLabels dataLabels,
+    ChartMarker marker, String? stacking, 
+    JSArray<ChartDataLabels> dataLabels,
     num lineWidth, EventPlotOptions events});
 }
 
@@ -573,7 +588,8 @@ extension type AreaPlotOptions._(JSObject _) implements LinePlotOptionsBase, JSO
   external factory AreaPlotOptions({
     num pointStart, num pointInterval, bool showCheckbox,
     String pointIntervalUnit, JSAny pointPlacement,
-    ChartMarker marker, String? stacking, ChartDataLabels dataLabels,
+    ChartMarker marker, String? stacking, 
+    JSArray<ChartDataLabels> dataLabels,
     num lineWidth, String lineColor, EventPlotOptions events});
 }
 
@@ -687,44 +703,46 @@ extension type ChartHalo._(JSObject _) implements JSObject {
   external factory ChartHalo();
 }
 
-extension type ChartLabels._(JSObject _) implements JSObject {
-  
-  external bool get useHTML;
-  external set useHTML(bool v);
-
-  external JSFunction get formatter;
-  external set formatter(JSFunction v);
-
-  external DOMStringMap get style;
-  external set style(DOMStringMap v);
+extension type ChartLabels._(JSObject _) implements _ChartLabels, JSObject {
 
   external num get step;
   external set step(num step);
 
-  external bool get enabled;
-  external set enabled(bool v);
-
-  external factory ChartLabels({JSFunction formatter, DOMStringMap style, num step, bool enabled});
+  external factory ChartLabels({JSFunction formatter, 
+    JSArray<JSNumber>? autoRotation,
+    bool? reserveSpace,
+    bool useHTML = false,
+    DOMStringMap? style, num step, bool enabled});
 }
 
-extension type ChartDataLabels._(JSObject _) implements JSObject {
-  external String get color;
-  external set color(String v);
-
-  external num get distance;
-  external set distance(num v);
-
+extension type _ChartLabels._(JSObject _) implements JSObject {
   external bool get enabled;
   external set enabled(bool v);
 
   external JSFunction get formatter;
   external set formatter(JSFunction v);
 
+  external bool get useHTML;
+  external set useHTML(bool v);
+
+  external DOMStringMap get style;
+  external set style(DOMStringMap v);
+}
+
+
+extension type ChartDataLabels._(JSObject _) implements _ChartLabels, JSObject {
+  external String get color;
+  external set color(String v);
+
+  external JSAny? get distance;
+  external set distance(JSAny? v);
+  
+
   external factory ChartDataLabels({
-    String? color,
-    bool? enabled,
-    bool useHTML,
-    num? distance,
+    String? color, bool? enabled,
+    bool useHTML = false,
+    DOMStringMap? style,
+    String? format, JSAny? distance,
     JSFunction? formatter});
 
 }
