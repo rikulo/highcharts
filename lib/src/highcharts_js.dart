@@ -142,7 +142,7 @@ extension type ChartTitle._(JSObject _) implements JSObject {
   external set text(String v);
 
   external factory ChartTitle({String text,
-    bool useHTML = false,
+    bool useHTML,
     DOMStringMap? style});
 }
 
@@ -711,7 +711,7 @@ extension type ChartLabels._(JSObject _) implements _ChartLabels, JSObject {
   external factory ChartLabels({JSFunction formatter, 
     JSArray<JSNumber>? autoRotation,
     bool? reserveSpace,
-    bool useHTML = false,
+    bool useHTML,
     DOMStringMap? style, num step, bool enabled});
 }
 
@@ -740,7 +740,7 @@ extension type ChartDataLabels._(JSObject _) implements _ChartLabels, JSObject {
 
   external factory ChartDataLabels({
     String? color, bool? enabled,
-    bool useHTML = false,
+    bool useHTML,
     DOMStringMap? style,
     String? format, JSAny? distance,
     JSFunction? formatter});
@@ -871,8 +871,8 @@ extension type ChartPoint._(JSObject _) implements JSObject {
   external ChartSeries series;
   external bool get visible;
   external int get x;
-  external int get y;
-  external int get total;
+  external num get y;
+  external num get total;
   external num get percentage;
   external JSObject get legendGroup;
   external JSObject get legendItem;
