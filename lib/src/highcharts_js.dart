@@ -403,6 +403,9 @@ extension type ChartTooltip._(JSObject _) implements JSObject {
     String headerFormat,
     String pointFormat,
     String footerFormat,
+    String borderColor,
+    String backgroundColor,
+    DOMStringMap style,
     bool shared,
     bool useHTML,
     JSFunction formatter});
