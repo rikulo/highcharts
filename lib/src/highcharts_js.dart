@@ -534,6 +534,7 @@ extension type PiePlotOptions._(JSObject _) implements PlotOptions, JSObject {
     JSArray<ChartDataLabels> dataLabels,
     bool allowPointSelect,
     bool ignoreHiddenPoint,
+    String fillColor,
     String size, ChartStates states,
     num startAngle, num endAngle,
     String borderColor, num borderWidth,
