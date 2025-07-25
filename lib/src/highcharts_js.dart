@@ -715,8 +715,8 @@ extension type ChartLabels._(JSObject _) implements _ChartLabels, JSObject {
 
   external factory ChartLabels({JSFunction formatter, 
     JSArray<JSNumber>? autoRotation,
-    bool? reserveSpace,
-    bool useHTML,
+    bool? reserveSpace, bool allowOverlap,
+    bool useHTML, bool connectorAllowed,
     DOMStringMap? style, num step, bool enabled});
 }
 
@@ -745,7 +745,7 @@ extension type ChartDataLabels._(JSObject _) implements _ChartLabels, JSObject {
 
   external factory ChartDataLabels({
     String? color, bool? enabled,
-    bool useHTML,
+    bool useHTML, bool allowOverlap,
     DOMStringMap? style,
     String? format, JSAny? distance,
     JSFunction? formatter});
