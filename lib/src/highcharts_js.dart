@@ -250,6 +250,7 @@ extension type ChartYAxis._(JSObject _) implements JSObject {
     String gridLineColor, num tickAmount,
     num tickInterval, JSFunction tickPositioner, 
     bool showFirstLabel,
+    bool allowDecimals,
     JSObject stackLabels,
     String type, ChartAccessibility accessibility});
 }
