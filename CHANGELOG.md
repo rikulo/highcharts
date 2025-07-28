@@ -3,6 +3,7 @@
 **4.0.1**
 * Added Line chart
 * Added LinePlotOptions
+* Fixed setHTMLUnsafe errors
 
 **4.0.0**
 * Dart 3.7 required

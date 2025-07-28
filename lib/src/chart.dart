@@ -675,7 +675,12 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
 
 Element _createUncheckedHtml(String html) {
   final template = HTMLTemplateElement();
-  template.setHTMLUnsafe(html.toJS);
+  try {
+    template.setHTMLUnsafe(html.toJS);
+  } catch (e) {
+    // Fallback for browsers that do not support setHTMLUnsafe
+    template.innerHTML = html.toJS;
+  }
   return template.content.firstElementChild!;
 }
 
