@@ -229,7 +229,7 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
 
   final String type;
   @override
-  final element = _createUncheckedHtml('<div class="highchart-wrap"></div>');
+  final element = HTMLDivElement()..className = 'highchart-wrap';
 
   _BaseChartImpl(this.type, {String titleText = '', String subtitleText = '',
       dynamic width, dynamic height, ChartXAxis? xAxis, ChartYAxis? yAxis}):
@@ -671,17 +671,6 @@ class _AreaChartImpl<S extends Comparable, C extends Comparable>
   _AreaChartImpl({super.titleText = '', super.subtitleText = '',
     super.width, super.height, super.xAxis, super.yAxis}):
   super(ChartType.area);
-}
-
-Element _createUncheckedHtml(String html) {
-  final template = HTMLTemplateElement();
-  try {
-    template.setHTMLUnsafe(html.toJS);
-  } catch (e) {
-    // Fallback for browsers that do not support setHTMLUnsafe
-    template.innerHTML = html.toJS;
-  }
-  return template.content.firstElementChild!;
 }
 
 T? _at<T>(List<T?>? list, int index) {
