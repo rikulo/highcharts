@@ -10,6 +10,8 @@ import 'dart:js_interop';
 extension type Highcharts._(JSObject _) implements JSObject {
   external static ChartOptionsStatic getOptions();
 
+  external static void setOptions(JSObject options);
+
   external static HighChart chart(JSAny container, ChartConfiguration options);
 }
 
