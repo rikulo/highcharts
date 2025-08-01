@@ -1,5 +1,5 @@
 name: rikulo_highcharts
-version: 4.0.0+9
+version: 4.0.0+10
 description: Highcharts is a wrapper of highcharts in Dart.
 homepage: https://github.com/rikulo/highcharts
 documentation: https://pub.dev/documentation/rikulo_highcharts/latest/
