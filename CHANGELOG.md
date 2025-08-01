@@ -4,6 +4,8 @@
 * Added Line chart
 * Added LinePlotOptions
 * Fixed setHTMLUnsafe errors
+* Added margin attribute of ChartTitle
+* Allow set title & subtitle of ChartConfiguration
 
 **4.0.0**
 * Dart 3.7 required
