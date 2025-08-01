@@ -365,8 +365,8 @@ C extends Comparable, T extends ChartModel<S, C>> implements Chart<S, C, T> {
   ChartConfiguration get _chartConfig {
     return ChartConfiguration(
       chart: chartOptions!,
-      title: ChartTitle(text: _titleText),
-      subtitle: ChartTitle(text: _subtitleText),
+      title: title ?? ChartTitle(text: _titleText),
+      subtitle: subtitle ?? ChartTitle(text: _subtitleText),
       xAxis: xAxis, yAxis: yAxis,
       credits: ChartCredits(enabled: false),
       responsive: responsive,
