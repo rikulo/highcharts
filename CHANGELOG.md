@@ -4,7 +4,7 @@
 * Added Line chart
 * Added LinePlotOptions
 * Fixed setHTMLUnsafe errors
-* Added margin attribute of ChartTitle
+* Added margin/minScale/align attribute of ChartTitle
 * Allow set title & subtitle of ChartConfiguration
 
 **4.0.0**

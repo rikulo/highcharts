@@ -145,6 +145,8 @@ extension type ChartTitle._(JSObject _) implements JSObject {
 
   external factory ChartTitle({String text,
     int margin,
+    num minScale,
+    String align,
     bool useHTML,
     DOMStringMap? style});
 }
