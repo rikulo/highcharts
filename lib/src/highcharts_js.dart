@@ -250,7 +250,7 @@ extension type ChartYAxis._(JSObject _) implements JSObject {
   external set accessibility(ChartAccessibility v);
 
   external factory ChartYAxis({
-    ChartTitle title, num min,
+    ChartTitle title, num min, num? max,
     ChartLabels labels,
     String gridLineColor, num tickAmount,
     num tickInterval, JSFunction tickPositioner, 

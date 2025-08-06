@@ -6,6 +6,7 @@
 * Fixed setHTMLUnsafe errors
 * Added margin/minScale/align attribute of ChartTitle
 * Allow set title & subtitle of ChartConfiguration
+* Allow set max of ChartYAxis
 
 **4.0.0**
 * Dart 3.7 required
